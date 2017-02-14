@@ -36,9 +36,10 @@ struct GroceryItem {
     let amountOfEWaste: Double!
     let amountOfBioWaste: Double!
     let amountOfIron: Double!
+    var uid: String!
     
     // Initialize from arbitrary data
-    init(name: String, addedByUser: String, completed: Bool, key: String = "",  amountOfPlastic: Double, amountOfPaper: Double, amountOfTextile: Double, amountOfEWaste: Double, amountOfBioWaste: Double, amountOfIron: Double) {
+    init(name: String, addedByUser: String, completed: Bool, key: String = "",  amountOfPlastic: Double, amountOfPaper: Double, amountOfTextile: Double, amountOfEWaste: Double, amountOfBioWaste: Double, amountOfIron: Double, uid: String = "") {
         self.key = key
         self.name = name
         self.addedByUser = addedByUser
@@ -50,6 +51,7 @@ struct GroceryItem {
         self.amountOfEWaste = amountOfEWaste
         self.amountOfBioWaste = amountOfBioWaste
         self.amountOfIron = amountOfIron
+        self.uid = uid
     }
     
     init(snapshot: FDataSnapshot) {
@@ -64,6 +66,7 @@ struct GroceryItem {
         amountOfEWaste = snapshot.value["amountOfEWaste"] as? Double
         amountOfBioWaste = snapshot.value["amountOfBioWaste"] as? Double
         amountOfIron = snapshot.value["amountOfIron"] as? Double
+        uid = snapshot.value["uid"] as? String
     }
     
     func toAnyObject() -> AnyObject {
@@ -76,7 +79,8 @@ struct GroceryItem {
             "amountOfTextile": amountOfTextile,
             "amountOfEWaste": amountOfEWaste,
             "amountOfBioWaste": amountOfBioWaste,
-            "amountOfIron": amountOfIron
+            "amountOfIron": amountOfIron,
+           "uid": uid
         ]
     }
     

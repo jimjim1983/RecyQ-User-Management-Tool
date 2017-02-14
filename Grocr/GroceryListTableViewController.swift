@@ -44,9 +44,9 @@ class GroceryListTableViewController: UITableViewController {
         tableView.allowsMultipleSelectionDuringEditing = false
         
         // User Count
-        userCountBarButtonItem = UIBarButtonItem(title: "1", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(GroceryListTableViewController.userCountButtonDidTouch))
-        userCountBarButtonItem.tintColor = UIColor.whiteColor()
-        navigationItem.leftBarButtonItem = userCountBarButtonItem
+//        userCountBarButtonItem = UIBarButtonItem(title: "1", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(GroceryListTableViewController.userCountButtonDidTouch))
+//        userCountBarButtonItem.tintColor = UIColor.whiteColor()
+//        navigationItem.leftBarButtonItem = userCountBarButtonItem
         
         //user = User(uid: "FakeId", email: "hungry@person.food")
     }
@@ -54,7 +54,7 @@ class GroceryListTableViewController: UITableViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        ref.queryOrderedByChild("completed").observeEventType(.Value, withBlock: { snapshot in
+        ref.queryOrderedByChild("name").observeEventType(.Value, withBlock: { snapshot in
             var newItems = [GroceryItem]()
             for item in snapshot.children {
                 let groceryItem = GroceryItem(snapshot: item as! FDataSnapshot)
@@ -62,6 +62,10 @@ class GroceryListTableViewController: UITableViewController {
             }
             self.items = newItems
             self.tableView.reloadData()
+            
+            //Unauthorize in case of a crash caused by the deletion of the user on the back end
+            //self.ref.unauth()
+            
         })
         ref.observeAuthEventWithBlock { authData in
             if authData != nil {
@@ -98,17 +102,32 @@ class GroceryListTableViewController: UITableViewController {
         let wasteTotal = groceryItem.amountOfBioWaste + groceryItem.amountOfEWaste + groceryItem.amountOfIron + groceryItem.amountOfPaper + groceryItem.amountOfPlastic + groceryItem.amountOfTextile
         
         cell.textLabel?.text = groceryItem.name
+        cell.detailTextLabel?.textColor = UIColor.darkGrayColor()
+        
         if wasteTotal >= 1 {
-        cell.detailTextLabel?.text = "Beginning user"
+            cell.detailTextLabel?.text = "Beginning user"
+            
+        
         }
         if wasteTotal == 0 {
             cell.detailTextLabel?.text = "New User"
+            
         }
         if wasteTotal > 30 {
             cell.detailTextLabel?.text = "Frequent User"
+            
         }
         if wasteTotal > 50 {
+            cell.detailTextLabel?.text = "Loyal User"
+        
+        }
+        if wasteTotal > 120 {
             cell.detailTextLabel?.text = "Top User"
+            
+        }
+        if wasteTotal > 250 {
+            cell.detailTextLabel?.text = "Super Awesome User"
+            
         }
         
         // Determine whether the cell is checked
@@ -161,48 +180,54 @@ class GroceryListTableViewController: UITableViewController {
     
     @IBAction func addButtonDidTouch(sender: AnyObject) {
         // Alert View for input
-        
 
-            
-            ref.unauth()
-            let loginVC = LoginViewController()
-            self.presentViewController(loginVC, animated: true, completion: nil)
+        // log out
+//            ref.unauth()
+//            let loginVC = LoginViewController()
+//            self.presentViewController(loginVC, animated: true, completion: nil)
+        
+        
 //            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
 //            appDelegate.window?.rootViewController = loginVC
         
             
         
         
-//        let alert = UIAlertController(title: "Voer gebruikersnaam in",
-//                                      message: "van nieuwe gebruiker",
-//                                      preferredStyle: .Alert)
-//
-//        
-//        let saveAction = UIAlertAction(title: "Save",
-//                                       style: .Default) { (action: UIAlertAction!) -> Void in
-//
-//                                        let textField = alert.textFields![0]
-//                                        let groceryItem = GroceryItem(name: textField.text!, addedByUser: self.user.email, completed: false, amountOfPlastic: 0, amountOfPaper: 0, amountOfTextile: 0, amountOfEWaste: 0, amountOfBioWaste: 0, amountOfIron: 0)
-//                                        let groceryItemRef = self.ref.childByAppendingPath(textField.text!.lowercaseString)
-//                                        groceryItemRef.setValue(groceryItem.toAnyObject())
-//        }
-//        
-//        let cancelAction = UIAlertAction(title: "Cancel",
-//                                         style: .Default) { (action: UIAlertAction!) -> Void in
-//        }
-//        
-//        alert.addTextFieldWithConfigurationHandler {
-//            (textField: UITextField!) -> Void in
-//            textField.placeholder = "Enter username"
-//
-//        }
-//        
-//        alert.addAction(cancelAction)
-//        alert.addAction(saveAction)
-//        
-//        presentViewController(alert,
-//                              animated: true,
-//                              completion: nil)
+        let alert = UIAlertController(title: "Voer gebruikersnaam in",
+                                      message: "van nieuwe gebruiker",
+                                      preferredStyle: .Alert)
+
+        
+        let saveAction = UIAlertAction(title: "Opslaan",
+                                       style: .Default) { (action: UIAlertAction!) -> Void in
+
+                                        let textField = alert.textFields![0]
+                                        let textField2 = alert.textFields![1]
+                                        let uuid = NSUUID().UUIDString
+                                        let groceryItem = GroceryItem(name: textField.text!, addedByUser: textField2.text!, completed: false, amountOfPlastic: 0, amountOfPaper: 0, amountOfTextile: 0, amountOfEWaste: 0, amountOfBioWaste: 0, amountOfIron: 0, uid: uuid)
+                                        let groceryItemRef = self.ref.childByAppendingPath(textField.text!.lowercaseString)
+                                        groceryItemRef.setValue(groceryItem.toAnyObject())
+        }
+        
+        let cancelAction = UIAlertAction(title: "Annuleer",
+                                         style: .Default) { (action: UIAlertAction!) -> Void in
+        }
+        
+        alert.addTextFieldWithConfigurationHandler {
+            (textField: UITextField!) -> Void in
+            textField.placeholder = "Voer gebruikersnaam in"
+        }
+        alert.addTextFieldWithConfigurationHandler {
+            (textField2: UITextField!) -> Void in
+            textField2.placeholder = "Voer e-mailadres in"
+        }
+        
+        alert.addAction(cancelAction)
+        alert.addAction(saveAction)
+        
+        presentViewController(alert,
+                              animated: true,
+                              completion: nil)
     }
     
     func userCountButtonDidTouch() {

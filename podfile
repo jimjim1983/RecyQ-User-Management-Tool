@@ -1,1 +1,4 @@
 pod 'Firebase'
+pod 'Fabric'
+pod 'Crashlytics'
+
