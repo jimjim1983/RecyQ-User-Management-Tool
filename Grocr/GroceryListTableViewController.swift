@@ -26,8 +26,8 @@ class GroceryListTableViewController: UITableViewController {
     
     // MARK: Constants
     let ListToUsers = "ListToUsers"
-    let ref = Firebase(url: "https://recyqdb.firebaseio.com/clients")
-    let usersRef = Firebase(url: "https://recyqdb.firebaseio.com/online")
+    let ref = FIRDatabase.database().reference(withPath: "clients")
+    let usersRef = FIRDatabase.database().reference(withPath: "online")
     
     // MARK: Properties
     var items = [GroceryItem]()
@@ -51,13 +51,13 @@ class GroceryListTableViewController: UITableViewController {
         //user = User(uid: "FakeId", email: "hungry@person.food")
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        ref.queryOrderedByChild("name").observeEventType(.Value, withBlock: { snapshot in
+        ref.queryOrdered(byChild: "name").observe(.value, with: { snapshot in
             var newItems = [GroceryItem]()
-            for item in snapshot.children {
-                let groceryItem = GroceryItem(snapshot: item as! FDataSnapshot)
+            for item in (snapshot.children) {
+                let groceryItem = GroceryItem(snapshot: item as! FIRDataSnapshot)
                 newItems.append(groceryItem)
             }
             self.items = newItems
@@ -67,15 +67,24 @@ class GroceryListTableViewController: UITableViewController {
             //self.ref.unauth()
             
         })
-        ref.observeAuthEventWithBlock { authData in
-            if authData != nil {
-                self.user = User(authData: authData)
-                let currentUserRef = self.usersRef.childByAppendingPath(self.user.uid)
+        
+        FIRAuth.auth()!.addStateDidChangeListener({ (auth, firUser) in
+            if let firUser = firUser {
+                self.user = User(user: firUser)
+                let currentUserRef = self.usersRef.child(self.user.uid)
                 currentUserRef.setValue(self.user.email)
                 currentUserRef.onDisconnectRemoveValue()
             }
-        }
-        usersRef.observeEventType(.Value, withBlock: { (snapshot: FDataSnapshot!) in
+        })
+//        ref.observeAuthEvent { authData in
+//            if authData != nil {
+//                self.user = User(authData: authData!)
+//                let currentUserRef = self.usersRef?.child(byAppendingPath: self.user.uid)
+//                currentUserRef?.setValue(self.user.email)
+//                currentUserRef?.onDisconnectRemoveValue()
+//            }
+//        }
+        usersRef.observe(.value, with: { (snapshot: FIRDataSnapshot!) in
             if snapshot.exists() {
                 self.userCountBarButtonItem?.title = snapshot.childrenCount.description
             }
@@ -85,24 +94,24 @@ class GroceryListTableViewController: UITableViewController {
             })
     }
     
-    override func viewDidDisappear(animated: Bool) {
+    override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
     }
     
     // MARK: UITableView Delegate methods
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return items.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("ItemCell", forIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ItemCell", for: indexPath)
         let groceryItem = items[indexPath.row]
-        let wasteTotal = groceryItem.amountOfBioWaste + groceryItem.amountOfEWaste + groceryItem.amountOfIron + groceryItem.amountOfPaper + groceryItem.amountOfPlastic + groceryItem.amountOfTextile
+        let wasteTotal = Double(groceryItem.amountOfBioWaste) + Double(groceryItem.amountOfEWaste) + Double(groceryItem.amountOfIron) + Double(groceryItem.amountOfPaper) + Double(groceryItem.amountOfPlastic) + Double(groceryItem.amountOfTextile)
         
         cell.textLabel?.text = groceryItem.name
-        cell.detailTextLabel?.textColor = UIColor.darkGrayColor()
+        cell.detailTextLabel?.textColor = UIColor.darkGray
         
         if wasteTotal >= 1 {
             cell.detailTextLabel?.text = "Beginning user"
@@ -136,24 +145,24 @@ class GroceryListTableViewController: UITableViewController {
         return cell
     }
     
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
             let groceryItem = items[indexPath.row]
             groceryItem.ref?.removeValue()
         }
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
         let groceryDetailVC = GroceryDetailsViewController()
         let groceryItems = items[indexPath.row]
         groceryDetailVC.groceryItem = groceryItems
         let navigationController = UINavigationController(rootViewController: groceryDetailVC)
-        self.presentViewController(navigationController, animated: true, completion: nil)
+        self.present(navigationController, animated: true, completion: nil)
        
         //let cell = tableView.cellForRowAtIndexPath(indexPath)!
 //        var groceryItem = items[indexPath.row]
@@ -164,21 +173,21 @@ class GroceryListTableViewController: UITableViewController {
         //groceryItem.ref?.updateChildValues(["completed": toggledCompletion])
     }
     
-    func toggleCellCheckbox(cell: UITableViewCell, isCompleted: Bool) {
+    func toggleCellCheckbox(_ cell: UITableViewCell, isCompleted: Bool) {
         if !isCompleted {
-            cell.accessoryType = UITableViewCellAccessoryType.None
-            cell.textLabel?.textColor = UIColor.blackColor()
-            cell.detailTextLabel?.textColor = UIColor.blackColor()
+            cell.accessoryType = UITableViewCellAccessoryType.none
+            cell.textLabel?.textColor = UIColor.black
+            cell.detailTextLabel?.textColor = UIColor.black
         } else {
-            cell.accessoryType = UITableViewCellAccessoryType.Checkmark
-            cell.textLabel?.textColor = UIColor.grayColor()
-            cell.detailTextLabel?.textColor = UIColor.grayColor()
+            cell.accessoryType = UITableViewCellAccessoryType.checkmark
+            cell.textLabel?.textColor = UIColor.gray
+            cell.detailTextLabel?.textColor = UIColor.gray
         }
     }
     
     // MARK: Add Item
     
-    @IBAction func addButtonDidTouch(sender: AnyObject) {
+    @IBAction func addButtonDidTouch(_ sender: AnyObject) {
         // Alert View for input
 
         // log out
@@ -195,29 +204,29 @@ class GroceryListTableViewController: UITableViewController {
         
         let alert = UIAlertController(title: "Voer gebruikersnaam in",
                                       message: "van nieuwe gebruiker",
-                                      preferredStyle: .Alert)
+                                      preferredStyle: .alert)
 
         
         let saveAction = UIAlertAction(title: "Opslaan",
-                                       style: .Default) { (action: UIAlertAction!) -> Void in
+                                       style: .default) { (action: UIAlertAction!) -> Void in
 
                                         let textField = alert.textFields![0]
                                         let textField2 = alert.textFields![1]
-                                        let uuid = NSUUID().UUIDString
+                                        let uuid = UUID().uuidString
                                         let groceryItem = GroceryItem(name: textField.text!, addedByUser: textField2.text!, completed: false, amountOfPlastic: 0, amountOfPaper: 0, amountOfTextile: 0, amountOfEWaste: 0, amountOfBioWaste: 0, amountOfIron: 0, uid: uuid)
-                                        let groceryItemRef = self.ref.childByAppendingPath(textField.text!.lowercaseString)
+                                        let groceryItemRef = self.ref.child(byAppendingPath: textField.text!.lowercased())
                                         groceryItemRef.setValue(groceryItem.toAnyObject())
         }
         
         let cancelAction = UIAlertAction(title: "Annuleer",
-                                         style: .Default) { (action: UIAlertAction!) -> Void in
+                                         style: .default) { (action: UIAlertAction!) -> Void in
         }
         
-        alert.addTextFieldWithConfigurationHandler {
+        alert.addTextField {
             (textField: UITextField!) -> Void in
             textField.placeholder = "Voer gebruikersnaam in"
         }
-        alert.addTextFieldWithConfigurationHandler {
+        alert.addTextField {
             (textField2: UITextField!) -> Void in
             textField2.placeholder = "Voer e-mailadres in"
         }
@@ -225,14 +234,14 @@ class GroceryListTableViewController: UITableViewController {
         alert.addAction(cancelAction)
         alert.addAction(saveAction)
         
-        presentViewController(alert,
+        present(alert,
                               animated: true,
                               completion: nil)
     }
     
     func userCountButtonDidTouch() {
 
-        performSegueWithIdentifier(ListToUsers, sender: nil)
+        performSegue(withIdentifier: ListToUsers, sender: nil)
     }
     
 }

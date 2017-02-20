@@ -27,9 +27,9 @@ struct User {
   let email: String
   
   // Initialize from Firebase
-  init(authData: FAuthData) {
-    uid = authData.uid
-    email = authData.providerData["email"] as! String
+  init(user: FIRUser) {
+    uid = user.uid
+    email = user.email!
   }
   
   // Initialize from arbitrary data

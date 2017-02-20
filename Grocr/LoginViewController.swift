@@ -27,7 +27,7 @@ class LoginViewController: UIViewController {
     
     // MARK: Constants
     let LoginToList = "LoginToList"
-    let ref = Firebase(url: "https://recyqdb.firebaseio.com")
+    let ref = FIRDatabase.database().reference()
     
     // MARK: Outlets
     @IBOutlet weak var textFieldLoginEmail: UITextField!
@@ -38,94 +38,114 @@ class LoginViewController: UIViewController {
     // MARK: UIViewController Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(LoginViewController.keyboardWillShow(_:)), name:UIKeyboardWillShowNotification, object: self.view.window)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(LoginViewController.keyboardWillHide(_:)), name:UIKeyboardWillHideNotification, object: self.view.window)
+        NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.keyboardWillShow(_:)), name:NSNotification.Name.UIKeyboardWillShow, object: self.view.window)
+        NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: self.view.window)
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
     }
     
-    override func viewWillDisappear(animated: Bool) {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: self.view.window)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: self.view.window)
+    override func viewWillDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: self.view.window)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: self.view.window)
     }
     
     // MARK: Actions
-    @IBAction func loginDidTouch(sender: AnyObject) {
-        print("login button pressed")
-        ref.authUser(textFieldLoginEmail.text, password: textFieldLoginPassword.text, withCompletionBlock: { (error, auth) in
-            self.ref.observeAuthEventWithBlock { (authData) -> Void in
-                if authData != nil {
-                    self.performSegueWithIdentifier(self.LoginToList, sender: nil)
+    @IBAction func loginDidTouch(_ sender: AnyObject) {
+
+        if let email = textFieldLoginEmail.text, let password = textFieldLoginPassword.text {
+            
+            FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user, error) in
+                if error != nil {
+                    print("Error loggin user in: \(error?.localizedDescription)")
+                    return
+                }
+                if let user = user {
+                    self.performSegue(withIdentifier: self.LoginToList, sender: nil)
                     print("login succesful")
                 }
-            }
-
-        })
+                
+            })
+        }
     }
     
-    @IBAction func signUpDidTouch(sender: AnyObject) {
+    @IBAction func signUpDidTouch(_ sender: AnyObject) {
         let alert = UIAlertController(title: "Register",
                                       message: "Register",
-                                      preferredStyle: .Alert)
+                                      preferredStyle: .alert)
         
         let saveAction = UIAlertAction(title: "Save",
-                                       style: .Default) { (action: UIAlertAction!) -> Void in
+                                       style: .default) { (action: UIAlertAction!) -> Void in
                                         
                                         let emailField = alert.textFields![0]
                                         let passwordField = alert.textFields![1]
-                                        self.ref.createUser(emailField.text, password: passwordField.text) { (error: NSError!) in
-                                            if error == nil {
-                                                self.ref.authUser(emailField.text, password: passwordField.text, withCompletionBlock: { (error, auth) in
-                                                })
-                                            }
-                                        }}
-        
-        let cancelAction = UIAlertAction(title: "Cancel",
-                                         style: .Default) { (action: UIAlertAction!) -> Void in
+                                        
+                                        if let email = emailField.text, let password = passwordField.text {
+                                            
+                                            FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user, error) in
+                                                if error != nil {
+                                                    print("Error signing user in: \(error?.localizedDescription)")
+                                                    return
+                                                }
+                                                else {
+                                                    FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user, error) in
+                                                        if error != nil {
+                                                            print("Error loggin user in: \(error?.localizedDescription)")
+                                                            return
+                                                        }
+
+                                                    })
+                                                    
+                                                }
+                                            })
+                                        }
         }
         
-        alert.addTextFieldWithConfigurationHandler {
+        let cancelAction = UIAlertAction(title: "Cancel",
+                                         style: .default) { (action: UIAlertAction!) -> Void in
+        }
+        
+        alert.addTextField {
             (textEmail) -> Void in
             textEmail.placeholder = "Enter your email"
         }
         
-        alert.addTextFieldWithConfigurationHandler {
+        alert.addTextField {
             (textPassword) -> Void in
-            textPassword.secureTextEntry = true
+            textPassword.isSecureTextEntry = true
             textPassword.placeholder = "Enter your password"
         }
         
         alert.addAction(saveAction)
         alert.addAction(cancelAction)
         
-        presentViewController(alert,
+        present(alert,
                               animated: true,
                               completion: nil)
     }
     
-    func keyboardWillHide(sender: NSNotification) {
-        let userInfo: [NSObject : AnyObject] = sender.userInfo!
-        let keyboardSize: CGSize = userInfo[UIKeyboardFrameBeginUserInfoKey]!.CGRectValue.size
+    func keyboardWillHide(_ sender: Notification) {
+        let userInfo: [AnyHashable: Any] = sender.userInfo!
+        let keyboardSize: CGSize = (userInfo[UIKeyboardFrameBeginUserInfoKey]! as AnyObject).cgRectValue.size
         self.view.frame.origin.y += keyboardSize.height
     }
     
-    func keyboardWillShow(sender: NSNotification) {
-        let userInfo: [NSObject : AnyObject] = sender.userInfo!
+    func keyboardWillShow(_ sender: Notification) {
+        let userInfo: [AnyHashable: Any] = sender.userInfo!
         
-        let keyboardSize: CGSize = userInfo[UIKeyboardFrameBeginUserInfoKey]!.CGRectValue.size
-        let offset: CGSize = userInfo[UIKeyboardFrameEndUserInfoKey]!.CGRectValue.size
+        let keyboardSize: CGSize = (userInfo[UIKeyboardFrameBeginUserInfoKey]! as AnyObject).cgRectValue.size
+        let offset: CGSize = (userInfo[UIKeyboardFrameEndUserInfoKey]! as AnyObject).cgRectValue.size
         
         if keyboardSize.height == offset.height {
             if self.view.frame.origin.y == 0 {
-                UIView.animateWithDuration(0.1, animations: { () -> Void in
+                UIView.animate(withDuration: 0.1, animations: { () -> Void in
                     self.view.frame.origin.y -= keyboardSize.height
                 })
             }
         } else {
-            UIView.animateWithDuration(0.1, animations: { () -> Void in
+            UIView.animate(withDuration: 0.1, animations: { () -> Void in
                 self.view.frame.origin.y += keyboardSize.height - offset.height
             })
         }

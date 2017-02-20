@@ -26,7 +26,8 @@ class OnlineUsersTableViewController: UITableViewController {
     
     // MARK: Constants
     let UserCell = "UserCell"
-    let usersRef = Firebase(url: "https://recyqdb.firebaseio.com/online")
+    let usersRef =  FIRDatabase.database().reference(withPath: "online")
+
     
     // MARK: Properties
     var currentUsers: [String] = [String]()
@@ -37,21 +38,21 @@ class OnlineUsersTableViewController: UITableViewController {
         currentUsers.append("hungry@person.food")
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        usersRef.observeEventType(.ChildAdded, withBlock: { (snap: FDataSnapshot!) in
+        usersRef.observe(.childAdded, with: { (snap: FIRDataSnapshot!) in
             self.currentUsers.append(snap.value as! String)
             let row = self.currentUsers.count - 1
-            let indexPath = NSIndexPath(forRow: row, inSection: 0)
-            self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Top)
+            let indexPath = IndexPath(row: row, section: 0)
+            self.tableView.insertRows(at: [indexPath], with: .top)
         })
-        usersRef.observeEventType(.ChildRemoved, withBlock: { (snap: FDataSnapshot!) -> Void in
+        usersRef.observe(.childRemoved, with: { (snap: FIRDataSnapshot!) -> Void in
             let emailToFind: String! = snap.value as! String
-            for(index, email) in self.currentUsers.enumerate() {
+            for(index, email) in self.currentUsers.enumerated() {
                 if email == emailToFind {
-                    let indexPath = NSIndexPath(forRow: index, inSection: 0)
-                    self.currentUsers.removeAtIndex(index)
-                    self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+                    let indexPath = IndexPath(row: index, section: 0)
+                    self.currentUsers.remove(at: index)
+                    self.tableView.deleteRows(at: [indexPath], with: .fade)
                 }
             }
         })
@@ -59,12 +60,12 @@ class OnlineUsersTableViewController: UITableViewController {
     
     // MARK: UITableView Delegate methods
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return currentUsers.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(UserCell, forIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: UserCell, for: indexPath)
         let onlineUserEmail = currentUsers[indexPath.row]
         cell.textLabel?.text = onlineUserEmail
         return cell
