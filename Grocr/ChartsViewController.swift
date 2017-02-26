@@ -12,35 +12,33 @@ import Charts
 class ChartsViewController: UIViewController, IAxisValueFormatter {
 
     @IBOutlet var barChartView: BarChartView!
-    
+        
     var groceryItem: GroceryItem!
-    
     var wasteArray: [String]!
     var amounts: [Double]!
+    var updatedAmounts :[Double]?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = groceryItem.name
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addWaste))
         
-        barChartView.xAxis.valueFormatter = self
-        
-        self.wasteArray = ["Plastic", "Paper", "Textile", "Iron", "BioWaste", "EWaste"]
-        if let amounts = self.amounts {
-            
-            setChart(dataPoints: self.wasteArray, values: amounts)
-        }
+        self.setupViews()
     }
     
-    func addWaste() {
+    private func setupViews() {
+        self.title = groceryItem.name
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(showGroceryDetailVC))
+        self.navigationController?.navigationBar.backItem?.title = "Anything Else"
+        
+        self.barChartView.xAxis.valueFormatter = self
+        self.wasteArray = ["Plastic", "Paper", "Textile", "Iron", "BioWaste", "EWaste"]
+        self.setChart(dataPoints: self.wasteArray, values: amounts)
+    }
+    
+    func showGroceryDetailVC() {
         let groceryDetailsVC = GroceryDetailsViewController(nibName: "GroceryDetailsViewController", bundle: nil)
+        groceryDetailsVC.delegate = self
         groceryDetailsVC.groceryItem = self.groceryItem
         self.navigationController?.pushViewController(groceryDetailsVC, animated: true)//(groceryDetailsVC, animated: true, completion: nil)
-    }
-    
-    public func stringForValue(_ value: Double, axis: Charts.AxisBase?) -> String
-    {
-        return self.wasteArray[Int(value)]
     }
     
     func setChart(dataPoints: [String], values: [Double]) {
@@ -55,8 +53,6 @@ class ChartsViewController: UIViewController, IAxisValueFormatter {
         }
         
         let chartDataSet = BarChartDataSet(values: dataEntries, label: "Amounts")
-        
-        //        let chartData = BarChartData(xVals: months, dataSet: chartDataSet)
         let chartData = BarChartData(dataSet: chartDataSet)
         barChartView.data = chartData
         
@@ -74,6 +70,12 @@ class ChartsViewController: UIViewController, IAxisValueFormatter {
         barChartView.rightAxis.addLimitLine(ll)
     }
     
+    // Returns strings for Double values. We need this to show text in the xAxis of a chart.
+    public func stringForValue(_ value: Double, axis: Charts.AxisBase?) -> String
+    {
+        return self.wasteArray[Int(value)]
+    }
+    
     func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
         print("\(entry.y) in \(entry.x)")
     }
@@ -82,4 +84,13 @@ class ChartsViewController: UIViewController, IAxisValueFormatter {
         _ = self.navigationController?.popViewController(animated: true)
     }
 
+}
+
+// Extension to hold the required delegate method for updating the chart after waste is added.
+extension ChartsViewController: GroceryDetailsViewControllerProtocol {
+    func didFinishAddingWasteItems(sender: GroceryDetailsViewController) {
+        self.groceryItem = sender.groceryItem
+        self.updatedAmounts = [groceryItem.amountOfPlastic, groceryItem.amountOfPaper, groceryItem.amountOfTextile, groceryItem.amountOfIron, groceryItem.amountOfBioWaste, groceryItem.amountOfEWaste]
+        setChart(dataPoints: self.wasteArray, values: updatedAmounts!)
+    }
 }

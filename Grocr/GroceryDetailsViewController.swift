@@ -8,9 +8,15 @@
 
 import UIKit
 
+protocol GroceryDetailsViewControllerProtocol: class {
+    func didFinishAddingWasteItems(sender: GroceryDetailsViewController)
+}
+
 var couponName = String()
 
 class GroceryDetailsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
+    weak var delegate: GroceryDetailsViewControllerProtocol?
     
     var groceryItem: GroceryItem!
     var ref = FIRDatabase.database().reference(withPath: "clients")
@@ -19,9 +25,6 @@ class GroceryDetailsViewController: UIViewController, UITableViewDelegate, UITab
     var couponItems = [FIRDataSnapshot]()
     //var items = [GroceryItem]()
 
-    
-    
-    
     @IBOutlet var emailLabel: UILabel!
     @IBOutlet var plasticLabel: UILabel!
     @IBOutlet var paperLabel: UILabel!
@@ -100,23 +103,32 @@ class GroceryDetailsViewController: UIViewController, UITableViewDelegate, UITab
         
         let amountOfPlastic = groceryItem.amountOfPlastic + ((plasticTextField.text)! as NSString).doubleValue
         ref.child("amountOfPlastic").setValue(amountOfPlastic)
+        self.groceryItem.amountOfPlastic = amountOfPlastic
         
         let amountOfPaper = groceryItem.amountOfPaper + ((paperTextField.text)! as NSString).doubleValue
         ref.child("amountOfPaper").setValue(amountOfPaper)
+        self.groceryItem.amountOfPaper = amountOfPaper
         
         let amountOfTextile = groceryItem.amountOfTextile + ((textileTextField.text)! as NSString).doubleValue
         ref.child( "amountOfTextile").setValue(amountOfTextile)
+        self.groceryItem.amountOfTextile = amountOfTextile
         
         let amountOfIron = groceryItem.amountOfIron + ((ironTextField.text)! as NSString).doubleValue
         ref.child( "amountOfIron").setValue(amountOfIron)
+        self.groceryItem.amountOfIron = amountOfIron
         
         let amountOfEWaste = groceryItem.amountOfEWaste + ((eWasteTextField.text)! as NSString).doubleValue
         ref.child( "amountOfEWaste").setValue(amountOfEWaste)
+        self.groceryItem.amountOfEWaste = amountOfEWaste
         
         let amountOfBioWaste = groceryItem.amountOfBioWaste + ((bioWasteTextField.text)! as NSString).doubleValue
         ref.child( "amountOfBioWaste").setValue(amountOfBioWaste)
+        self.groceryItem.amountOfBioWaste = amountOfBioWaste
         
-        _ = self.navigationController?.popViewController(animated: true)
+        if let delegate = self.delegate {
+            delegate.didFinishAddingWasteItems(sender: self)
+            _ = self.navigationController?.popViewController(animated: true)
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

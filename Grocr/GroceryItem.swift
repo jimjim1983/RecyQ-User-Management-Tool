@@ -30,12 +30,12 @@ struct GroceryItem {
     let addedByUser: String!
     let ref: FIRDatabaseReference?
     var completed: Bool!
-    let amountOfPlastic: Double!
+    var amountOfPlastic: Double!
     var amountOfPaper: Double!
-    let amountOfTextile: Double!
-    let amountOfEWaste: Double!
-    let amountOfBioWaste: Double!
-    let amountOfIron: Double!
+    var amountOfTextile: Double!
+    var amountOfEWaste: Double!
+    var amountOfBioWaste: Double!
+    var amountOfIron: Double!
     var uid: String!
     
     // Initialize from arbitrary data

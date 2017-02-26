@@ -21,7 +21,6 @@
  */
 
 import UIKit
-import QuartzCore
 
 class LoginViewController: UIViewController {
     

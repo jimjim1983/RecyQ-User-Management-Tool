@@ -38,7 +38,7 @@ class GroceryListTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         
         // Set up swipe to delete
         tableView.allowsMultipleSelectionDuringEditing = false
