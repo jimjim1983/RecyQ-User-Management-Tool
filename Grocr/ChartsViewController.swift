@@ -9,7 +9,7 @@
 import UIKit
 import Charts
 
-class ChartsViewController: UIViewController, IAxisValueFormatter {
+class ChartsViewController: UIViewController, ChartViewDelegate, IAxisValueFormatter {
 
     @IBOutlet var barChartView: BarChartView!
         
@@ -20,7 +20,6 @@ class ChartsViewController: UIViewController, IAxisValueFormatter {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.setupViews()
     }
     
@@ -29,6 +28,7 @@ class ChartsViewController: UIViewController, IAxisValueFormatter {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(showGroceryDetailVC))
         self.navigationController?.navigationBar.backItem?.title = "Anything Else"
         
+        self.barChartView.delegate = self
         self.barChartView.xAxis.valueFormatter = self
         self.wasteArray = ["Plastic", "Paper", "Textile", "Iron", "BioWaste", "EWaste"]
         self.setChart(dataPoints: self.wasteArray, values: amounts)
@@ -38,7 +38,7 @@ class ChartsViewController: UIViewController, IAxisValueFormatter {
         let groceryDetailsVC = GroceryDetailsViewController(nibName: "GroceryDetailsViewController", bundle: nil)
         groceryDetailsVC.delegate = self
         groceryDetailsVC.groceryItem = self.groceryItem
-        self.navigationController?.pushViewController(groceryDetailsVC, animated: true)//(groceryDetailsVC, animated: true, completion: nil)
+        self.navigationController?.pushViewController(groceryDetailsVC, animated: true)
     }
     
     func setChart(dataPoints: [String], values: [Double]) {
@@ -77,7 +77,8 @@ class ChartsViewController: UIViewController, IAxisValueFormatter {
     }
     
     func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
-        print("\(entry.y) in \(entry.x)")
+        
+        print("\(entry.y) in \(stringForValue(entry.x, axis: nil))")
     }
     
     @IBAction func terugButtonTapped(_ sender: Any) {
