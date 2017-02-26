@@ -44,9 +44,9 @@ class GroceryListTableViewController: UITableViewController {
         tableView.allowsMultipleSelectionDuringEditing = false
         
         // User Count
-//        userCountBarButtonItem = UIBarButtonItem(title: "1", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(GroceryListTableViewController.userCountButtonDidTouch))
-//        userCountBarButtonItem.tintColor = UIColor.whiteColor()
-//        navigationItem.leftBarButtonItem = userCountBarButtonItem
+        //        userCountBarButtonItem = UIBarButtonItem(title: "1", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(GroceryListTableViewController.userCountButtonDidTouch))
+        //        userCountBarButtonItem.tintColor = UIColor.whiteColor()
+        //        navigationItem.leftBarButtonItem = userCountBarButtonItem
         
         //user = User(uid: "FakeId", email: "hungry@person.food")
     }
@@ -76,14 +76,14 @@ class GroceryListTableViewController: UITableViewController {
                 currentUserRef.onDisconnectRemoveValue()
             }
         })
-//        ref.observeAuthEvent { authData in
-//            if authData != nil {
-//                self.user = User(authData: authData!)
-//                let currentUserRef = self.usersRef?.child(byAppendingPath: self.user.uid)
-//                currentUserRef?.setValue(self.user.email)
-//                currentUserRef?.onDisconnectRemoveValue()
-//            }
-//        }
+        //        ref.observeAuthEvent { authData in
+        //            if authData != nil {
+        //                self.user = User(authData: authData!)
+        //                let currentUserRef = self.usersRef?.child(byAppendingPath: self.user.uid)
+        //                currentUserRef?.setValue(self.user.email)
+        //                currentUserRef?.onDisconnectRemoveValue()
+        //            }
+        //        }
         usersRef.observe(.value, with: { (snapshot: FIRDataSnapshot!) in
             if snapshot.exists() {
                 self.userCountBarButtonItem?.title = snapshot.childrenCount.description
@@ -91,7 +91,7 @@ class GroceryListTableViewController: UITableViewController {
             else {
                 self.userCountBarButtonItem?.title = "0"
             }
-            })
+        })
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -116,7 +116,7 @@ class GroceryListTableViewController: UITableViewController {
         if wasteTotal >= 1 {
             cell.detailTextLabel?.text = "Beginning user"
             
-        
+            
         }
         if wasteTotal == 0 {
             cell.detailTextLabel?.text = "New User"
@@ -128,7 +128,7 @@ class GroceryListTableViewController: UITableViewController {
         }
         if wasteTotal > 50 {
             cell.detailTextLabel?.text = "Loyal User"
-        
+            
         }
         if wasteTotal > 120 {
             cell.detailTextLabel?.text = "Top User"
@@ -140,7 +140,7 @@ class GroceryListTableViewController: UITableViewController {
         }
         
         // Determine whether the cell is checked
-       // toggleCellCheckbox(cell, isCompleted: groceryItem.completed)
+        // toggleCellCheckbox(cell, isCompleted: groceryItem.completed)
         
         return cell
     }
@@ -157,18 +157,24 @@ class GroceryListTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
-        let groceryDetailVC = GroceryDetailsViewController()
-        let groceryItems = items[indexPath.row]
-        groceryDetailVC.groceryItem = groceryItems
-        let navigationController = UINavigationController(rootViewController: groceryDetailVC)
-        self.present(navigationController, animated: true, completion: nil)
-       
-        //let cell = tableView.cellForRowAtIndexPath(indexPath)!
-//        var groceryItem = items[indexPath.row]
-//        groceryDetailVC.
         
-       // let toggledCompletion = !groceryItem.completed
+        //        let groceryDetailVC = GroceryDetailsViewController()
+        let chartsVC = self.storyboard?.instantiateViewController(withIdentifier: "chartsVC") as! ChartsViewController
+        let groceryItems = items[indexPath.row]
+        let wasteAmounts: [Double] = [groceryItems.amountOfPlastic, groceryItems.amountOfPaper, groceryItems.amountOfTextile, groceryItems.amountOfIron, groceryItems.amountOfBioWaste, groceryItems.amountOfEWaste]
+        chartsVC.amounts = wasteAmounts
+        chartsVC.groceryItem = groceryItems
+        //        groceryDetailVC.groceryItem = groceryItems
+        //        let navigationController = UINavigationController(rootViewController: barChartVC)
+        //        self.present(navigationController, animated: true, completion: nil)
+        
+        self.navigationController?.pushViewController(chartsVC, animated: true)
+        
+        //let cell = tableView.cellForRowAtIndexPath(indexPath)!
+        //        var groceryItem = items[indexPath.row]
+        //        groceryDetailVC.
+        
+        // let toggledCompletion = !groceryItem.completed
         //toggleCellCheckbox(cell, isCompleted: toggledCompletion)
         //groceryItem.ref?.updateChildValues(["completed": toggledCompletion])
     }
@@ -189,32 +195,32 @@ class GroceryListTableViewController: UITableViewController {
     
     @IBAction func addButtonDidTouch(_ sender: AnyObject) {
         // Alert View for input
-
+        
         // log out
-//            ref.unauth()
-//            let loginVC = LoginViewController()
-//            self.presentViewController(loginVC, animated: true, completion: nil)
+        //            ref.unauth()
+        //            let loginVC = LoginViewController()
+        //            self.presentViewController(loginVC, animated: true, completion: nil)
         
         
-//            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-//            appDelegate.window?.rootViewController = loginVC
+        //            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        //            appDelegate.window?.rootViewController = loginVC
         
-            
+        
         
         
         let alert = UIAlertController(title: "Voer gebruikersnaam in",
                                       message: "van nieuwe gebruiker",
                                       preferredStyle: .alert)
-
+        
         
         let saveAction = UIAlertAction(title: "Opslaan",
                                        style: .default) { (action: UIAlertAction!) -> Void in
-
+                                        
                                         let textField = alert.textFields![0]
                                         let textField2 = alert.textFields![1]
                                         let uuid = UUID().uuidString
                                         let groceryItem = GroceryItem(name: textField.text!, addedByUser: textField2.text!, completed: false, amountOfPlastic: 0, amountOfPaper: 0, amountOfTextile: 0, amountOfEWaste: 0, amountOfBioWaste: 0, amountOfIron: 0, uid: uuid)
-                                        let groceryItemRef = self.ref.child(byAppendingPath: textField.text!.lowercased())
+                                        let groceryItemRef = self.ref.child(textField.text!.lowercased())
                                         groceryItemRef.setValue(groceryItem.toAnyObject())
         }
         
@@ -235,12 +241,12 @@ class GroceryListTableViewController: UITableViewController {
         alert.addAction(saveAction)
         
         present(alert,
-                              animated: true,
-                              completion: nil)
+                animated: true,
+                completion: nil)
     }
     
     func userCountButtonDidTouch() {
-
+        
         performSegue(withIdentifier: ListToUsers, sender: nil)
     }
     

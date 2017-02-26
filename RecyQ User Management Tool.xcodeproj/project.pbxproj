@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		1CFA82AF6B3561F2FB9E51EA /* Pods_RecyQ_User_Management_Tool.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6429AD0569AFC8A101B3D46 /* Pods_RecyQ_User_Management_Tool.framework */; };
 		2B4C17B41E5B108000F34CC2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2B4C17B31E5B108000F34CC2 /* GoogleService-Info.plist */; };
+		2B9060EE1E62E9070007BEB4 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B9060E91E62E8E90007BEB4 /* Charts.framework */; };
+		2B9060EF1E62E9070007BEB4 /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2B9060E91E62E8E90007BEB4 /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2B9060F41E62E92E0007BEB4 /* ChartsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B9060F31E62E92E0007BEB4 /* ChartsViewController.swift */; };
+		2B9060F81E62EB5C0007BEB4 /* KeychainItemWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B9060F71E62EB5C0007BEB4 /* KeychainItemWrapper.swift */; };
 		A64634E61CF8753A0019BFCC /* GroceryDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CC1B8E1CBBC37100B6BE69 /* GroceryDetailsViewController.swift */; };
 		A695FB8B1CCE1B690043B6AC /* CouponsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A695FB891CCE1B690043B6AC /* CouponsTableViewCell.swift */; };
 		A695FB8C1CCE1B690043B6AC /* CouponsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A695FB8A1CCE1B690043B6AC /* CouponsTableViewCell.xib */; };
@@ -25,8 +29,57 @@
 		BB7DA5111B42C8100018B530 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7DA5101B42C8100018B530 /* User.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		2B9060E81E62E8E90007BEB4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2B9060E21E62E8E80007BEB4 /* Charts.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 06165F241D8110E600722320;
+			remoteInfo = Charts;
+		};
+		2B9060EA1E62E8E90007BEB4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2B9060E21E62E8E80007BEB4 /* Charts.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 06B120D51D811E6200D14B02;
+			remoteInfo = ChartsRealm;
+		};
+		2B9060EC1E62E8E90007BEB4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2B9060E21E62E8E80007BEB4 /* Charts.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 06165F2E1D8110E600722320;
+			remoteInfo = ChartsTests;
+		};
+		2B9060F01E62E9070007BEB4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2B9060E21E62E8E80007BEB4 /* Charts.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 06165F231D8110E600722320;
+			remoteInfo = Charts;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		2B9060F21E62E9080007BEB4 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				2B9060EF1E62E9070007BEB4 /* Charts.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		2B4C17B31E5B108000F34CC2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		2B9060E21E62E8E80007BEB4 /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Charts.xcodeproj; path = "../../../Downloads/Charts-master/Charts.xcodeproj"; sourceTree = "<group>"; };
+		2B9060F31E62E92E0007BEB4 /* ChartsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartsViewController.swift; sourceTree = "<group>"; };
+		2B9060F71E62EB5C0007BEB4 /* KeychainItemWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainItemWrapper.swift; sourceTree = "<group>"; };
+		2B9060F91E62EB7E0007BEB4 /* RecyQ User Management Tool.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "RecyQ User Management Tool.entitlements"; sourceTree = "<group>"; };
 		43648FEDAAFA1FE893C86BCD /* Pods-RecyQ User Management Tool.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RecyQ User Management Tool.release.xcconfig"; path = "Pods/Target Support Files/Pods-RecyQ User Management Tool/Pods-RecyQ User Management Tool.release.xcconfig"; sourceTree = "<group>"; };
 		A695FB891CCE1B690043B6AC /* CouponsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CouponsTableViewCell.swift; sourceTree = "<group>"; };
 		A695FB8A1CCE1B690043B6AC /* CouponsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CouponsTableViewCell.xib; sourceTree = "<group>"; };
@@ -55,15 +108,28 @@
 			buildActionMask = 2147483647;
 			files = (
 				1CFA82AF6B3561F2FB9E51EA /* Pods_RecyQ_User_Management_Tool.framework in Frameworks */,
+				2B9060EE1E62E9070007BEB4 /* Charts.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2B9060E31E62E8E80007BEB4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2B9060E91E62E8E90007BEB4 /* Charts.framework */,
+				2B9060EB1E62E8E90007BEB4 /* ChartsRealm.framework */,
+				2B9060ED1E62E8E90007BEB4 /* ChartsTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		BB2385531B3DD5AB0079CD01 = {
 			isa = PBXGroup;
 			children = (
+				2B9060F91E62EB7E0007BEB4 /* RecyQ User Management Tool.entitlements */,
+				2B9060E21E62E8E80007BEB4 /* Charts.xcodeproj */,
 				BB23855E1B3DD5AB0079CD01 /* Grocr */,
 				BB23855D1B3DD5AB0079CD01 /* Products */,
 				DCC88EBC367D376623B278E3 /* Pods */,
@@ -98,6 +164,7 @@
 				2B4C17B31E5B108000F34CC2 /* GoogleService-Info.plist */,
 				BB2385601B3DD5AB0079CD01 /* Info.plist */,
 				BB2385851B3DD8820079CD01 /* Grocr-Bridging-Header.h */,
+				2B9060F71E62EB5C0007BEB4 /* KeychainItemWrapper.swift */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -106,6 +173,7 @@
 			isa = PBXGroup;
 			children = (
 				BB2385631B3DD5AB0079CD01 /* LoginViewController.swift */,
+				2B9060F31E62E92E0007BEB4 /* ChartsViewController.swift */,
 				BB2385831B3DD8660079CD01 /* GroceryListTableViewController.swift */,
 				A6CC1B8E1CBBC37100B6BE69 /* GroceryDetailsViewController.swift */,
 				A6CC1B8F1CBBC37100B6BE69 /* GroceryDetailsViewController.xib */,
@@ -174,10 +242,12 @@
 				A62DC3051D0ED3CE00B8A8CA /* ShellScript */,
 				74E404AE90B7ED25206C5565 /* [CP] Embed Pods Frameworks */,
 				2BCA9646CF88D9B395B123B1 /* [CP] Copy Pods Resources */,
+				2B9060F21E62E9080007BEB4 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				2B9060F11E62E9070007BEB4 /* PBXTargetDependency */,
 			);
 			name = "RecyQ User Management Tool";
 			productName = Grocr;
@@ -198,6 +268,11 @@
 						CreatedOnToolsVersion = 6.3.1;
 						DevelopmentTeam = HZWL927386;
 						LastSwiftMigration = 0820;
+						SystemCapabilities = {
+							com.apple.Keychain = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -212,12 +287,42 @@
 			mainGroup = BB2385531B3DD5AB0079CD01;
 			productRefGroup = BB23855D1B3DD5AB0079CD01 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 2B9060E31E62E8E80007BEB4 /* Products */;
+					ProjectRef = 2B9060E21E62E8E80007BEB4 /* Charts.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				BB23855B1B3DD5AB0079CD01 /* RecyQ User Management Tool */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		2B9060E91E62E8E90007BEB4 /* Charts.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Charts.framework;
+			remoteRef = 2B9060E81E62E8E90007BEB4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		2B9060EB1E62E8E90007BEB4 /* ChartsRealm.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = ChartsRealm.framework;
+			remoteRef = 2B9060EA1E62E8E90007BEB4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		2B9060ED1E62E8E90007BEB4 /* ChartsTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = ChartsTests.xctest;
+			remoteRef = 2B9060EC1E62E8E90007BEB4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		BB23855A1B3DD5AB0079CD01 /* Resources */ = {
@@ -302,8 +407,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				BB2385641B3DD5AB0079CD01 /* LoginViewController.swift in Sources */,
+				2B9060F41E62E92E0007BEB4 /* ChartsViewController.swift in Sources */,
 				BB2385841B3DD8660079CD01 /* GroceryListTableViewController.swift in Sources */,
 				A695FB8E1CCE2AE20043B6AC /* Coupon.swift in Sources */,
+				2B9060F81E62EB5C0007BEB4 /* KeychainItemWrapper.swift in Sources */,
 				BB23858A1B3DD9640079CD01 /* GroceryItem.swift in Sources */,
 				BB30CD4A1B439B60004B3177 /* OnlineUsersTableViewController.swift in Sources */,
 				BB7DA5111B42C8100018B530 /* User.swift in Sources */,
@@ -314,6 +421,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2B9060F11E62E9070007BEB4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Charts;
+			targetProxy = 2B9060F01E62E9070007BEB4 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		BB2385651B3DD5AB0079CD01 /* Main.storyboard */ = {
@@ -421,8 +536,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = EA5BF2BCF08FC0358F7B00F8 /* Pods-RecyQ User Management Tool.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = "RecyQ User Management Tool.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = HZWL927386;
@@ -444,8 +561,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43648FEDAAFA1FE893C86BCD /* Pods-RecyQ User Management Tool.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = "RecyQ User Management Tool.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = HZWL927386;

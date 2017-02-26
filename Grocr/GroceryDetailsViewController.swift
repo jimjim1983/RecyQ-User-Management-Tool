@@ -90,7 +90,7 @@ class GroceryDetailsViewController: UIViewController, UITableViewDelegate, UITab
     
     func cancel() {
         //print(self.couponItems)
-        self.dismiss(animated: true, completion: nil)
+        _ = self.navigationController?.popViewController(animated: true)
     }
     
     func save() {
@@ -116,7 +116,7 @@ class GroceryDetailsViewController: UIViewController, UITableViewDelegate, UITab
         let amountOfBioWaste = groceryItem.amountOfBioWaste + ((bioWasteTextField.text)! as NSString).doubleValue
         ref.child( "amountOfBioWaste").setValue(amountOfBioWaste)
         
-        self.dismiss(animated: true, completion: nil)
+        _ = self.navigationController?.popViewController(animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

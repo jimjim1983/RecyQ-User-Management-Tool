@@ -29,6 +29,8 @@ class LoginViewController: UIViewController {
     let LoginToList = "LoginToList"
     let ref = FIRDatabase.database().reference()
     
+    let keychainItemWrapper = KeychainItemWrapper(identifier: "identifier for this item", accessGroup: "access group if shared")
+    
     // MARK: Outlets
     @IBOutlet weak var textFieldLoginEmail: UITextField!
     @IBOutlet weak var textFieldLoginPassword: UITextField!
@@ -38,8 +40,13 @@ class LoginViewController: UIViewController {
     // MARK: UIViewController Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.keyboardWillShow(_:)), name:NSNotification.Name.UIKeyboardWillShow, object: self.view.window)
         NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: self.view.window)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -54,7 +61,10 @@ class LoginViewController: UIViewController {
     
     // MARK: Actions
     @IBAction func loginDidTouch(_ sender: AnyObject) {
-
+        
+        self.keychainItemWrapper["email"] = textFieldLoginEmail.text as AnyObject?
+        self.keychainItemWrapper["password"] = textFieldLoginPassword.text as AnyObject?
+        
         if let email = textFieldLoginEmail.text, let password = textFieldLoginPassword.text {
             
             FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user, error) in
@@ -62,7 +72,7 @@ class LoginViewController: UIViewController {
                     print("Error loggin user in: \(error?.localizedDescription)")
                     return
                 }
-                if let user = user {
+                if user != nil {
                     self.performSegue(withIdentifier: self.LoginToList, sender: nil)
                     print("login succesful")
                 }
@@ -95,7 +105,7 @@ class LoginViewController: UIViewController {
                                                             print("Error loggin user in: \(error?.localizedDescription)")
                                                             return
                                                         }
-
+                                                        
                                                     })
                                                     
                                                 }
@@ -122,8 +132,8 @@ class LoginViewController: UIViewController {
         alert.addAction(cancelAction)
         
         present(alert,
-                              animated: true,
-                              completion: nil)
+                animated: true,
+                completion: nil)
     }
     
     func keyboardWillHide(_ sender: Notification) {

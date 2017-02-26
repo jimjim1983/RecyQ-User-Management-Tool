@@ -27,6 +27,7 @@ import Crashlytics
 
 let FirebaseUrl = "https://recyqdb.firebaseio.com/clients"
 let TappableRed = UIColor(red: 255.0/255.0, green: 167.0/255.0, blue: 127.0/255.0, alpha: 1.0)
+let keychainItemWrapper = KeychainItemWrapper(identifier: "identifier for this item", accessGroup: "access group if shared")
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -44,8 +45,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // TODO: Move this to where you establish a user session
         self.logUser()
         //Crashlytics.sharedInstance().crash()
-
-
+        self.checkIfUserIsKnown()
+        
         return true
     }
     
@@ -55,6 +56,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Crashlytics.sharedInstance().setUserEmail("user@fabric.io")
         Crashlytics.sharedInstance().setUserIdentifier("12345")
         Crashlytics.sharedInstance().setUserName("Test User")
+    }
+    
+    func checkIfUserIsKnown() {
+        let userEmail = keychainItemWrapper["email"] as? String
+        let userPassword = keychainItemWrapper["password"] as? String
+        
+        if let email = userEmail, let password = userPassword {
+            
+            FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user, error) in
+                if error != nil {
+                    print("Error loggin user in: \(error?.localizedDescription)")
+                    return
+                }
+                
+                if user != nil {
+                    let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+                    let groceryListTVC = storyboard.instantiateViewController(withIdentifier: "groceryListTVC") as! GroceryListTableViewController
+                    let navigationController = UINavigationController(rootViewController: groceryListTVC)
+                    self.window?.rootViewController = navigationController
+                    print("login succesful")
+                }
+                
+            })
+        }
     }
     
 }
