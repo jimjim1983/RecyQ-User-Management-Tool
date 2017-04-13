@@ -34,6 +34,12 @@ class GroceryListTableViewController: UITableViewController {
     var user: User!
     var userCountBarButtonItem: UIBarButtonItem!
     
+    fileprivate var dataSource: PickerViewDataSource!
+    var wasteLocations = [NearestWasteLocation]()
+    let locationsPickerView = UIPickerView()
+    var alert = UIAlertController()
+
+    
     // MARK: UIViewController Lifecycle
     
     override func viewDidLoad() {
@@ -43,12 +49,10 @@ class GroceryListTableViewController: UITableViewController {
         // Set up swipe to delete
         tableView.allowsMultipleSelectionDuringEditing = false
         
-        // User Count
-        //        userCountBarButtonItem = UIBarButtonItem(title: "1", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(GroceryListTableViewController.userCountButtonDidTouch))
-        //        userCountBarButtonItem.tintColor = UIColor.whiteColor()
-        //        navigationItem.leftBarButtonItem = userCountBarButtonItem
-        
-        //user = User(uid: "FakeId", email: "hungry@person.food")
+        self.wasteLocations = [.amsterdamsePoort, .hBuurt, .holendrecht, .venserpolder]
+        self.dataSource = PickerViewDataSource(wasteLocations: self.wasteLocations)
+        self.locationsPickerView.dataSource = self.dataSource
+        self.locationsPickerView.delegate = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -68,14 +72,14 @@ class GroceryListTableViewController: UITableViewController {
             
         })
         
-        FIRAuth.auth()!.addStateDidChangeListener({ (auth, firUser) in
-            if let firUser = firUser {
-                self.user = User(user: firUser)
-                let currentUserRef = self.usersRef.child(self.user.uid)
-                currentUserRef.setValue(self.user.email)
-                currentUserRef.onDisconnectRemoveValue()
-            }
-        })
+//        FIRAuth.auth()!.addStateDidChangeListener({ (auth, firUser) in
+//            if let firUser = firUser {
+//                self.user = User(user: firUser)
+//                let currentUserRef = self.usersRef.child(self.user.uid)
+//                currentUserRef.setValue(self.user.email)
+//                currentUserRef.onDisconnectRemoveValue()
+//            }
+//        })
         //        ref.observeAuthEvent { authData in
         //            if authData != nil {
         //                self.user = User(authData: authData!)
@@ -108,14 +112,13 @@ class GroceryListTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ItemCell", for: indexPath)
         let groceryItem = items[indexPath.row]
-        let wasteTotal = Double(groceryItem.amountOfBioWaste) + Double(groceryItem.amountOfEWaste) + Double(groceryItem.amountOfIron) + Double(groceryItem.amountOfPaper) + Double(groceryItem.amountOfPlastic) + Double(groceryItem.amountOfTextile)
+        let wasteTotal = Double(groceryItem.amountOfBioWaste) + Double(groceryItem.amountOfEWaste) +  Double(groceryItem.amountOfPaper) + Double(groceryItem.amountOfPlastic) + Double(groceryItem.amountOfTextile)
         
         cell.textLabel?.text = groceryItem.name
         cell.detailTextLabel?.textColor = UIColor.darkGray
         
         if wasteTotal >= 1 {
             cell.detailTextLabel?.text = "Beginning user"
-            
             
         }
         if wasteTotal == 0 {
@@ -161,7 +164,7 @@ class GroceryListTableViewController: UITableViewController {
         //        let groceryDetailVC = GroceryDetailsViewController()
         let chartsVC = self.storyboard?.instantiateViewController(withIdentifier: "chartsVC") as! ChartsViewController
         let groceryItems = items[indexPath.row]
-        let wasteAmounts: [Double] = [groceryItems.amountOfPlastic, groceryItems.amountOfPaper, groceryItems.amountOfTextile, groceryItems.amountOfIron, groceryItems.amountOfBioWaste, groceryItems.amountOfEWaste]
+        let wasteAmounts: [Double] = [groceryItems.amountOfPlastic, groceryItems.amountOfPaper, groceryItems.amountOfTextile, groceryItems.amountOfBioWaste, groceryItems.amountOfEWaste]
         chartsVC.amounts = wasteAmounts
         chartsVC.groceryItem = groceryItems
         //        groceryDetailVC.groceryItem = groceryItems
@@ -208,19 +211,32 @@ class GroceryListTableViewController: UITableViewController {
         
         
         
-        let alert = UIAlertController(title: "Voer gebruikersnaam in",
+        self.alert = UIAlertController(title: "Voer gebruikersnaam in",
                                       message: "van nieuwe gebruiker",
                                       preferredStyle: .alert)
-        
         
         let saveAction = UIAlertAction(title: "Opslaan",
                                        style: .default) { (action: UIAlertAction!) -> Void in
                                         
-                                        let textField = alert.textFields![0]
-                                        let textField2 = alert.textFields![1]
+                                        let firstNameTextField = self.alert.textFields![0]
+                                        let lastNameTextField = self.alert.textFields![1]
+                                        let addressTextField = self.alert.textFields![2]
+                                        let zipCodeTextField = self.alert.textFields![3]
+                                        let cityTextField = self.alert.textFields![4]
+                                        let phoneTextField = self.alert.textFields![5]
+                                        let emailTextField = self.alert.textFields![6]
+                                        let locationTextField = self.alert.textFields![7]
                                         let uuid = UUID().uuidString
-                                        let groceryItem = GroceryItem(name: textField.text!, addedByUser: textField2.text!, completed: false, amountOfPlastic: 0, amountOfPaper: 0, amountOfTextile: 0, amountOfEWaste: 0, amountOfBioWaste: 0, amountOfIron: 0, uid: uuid)
-                                        let groceryItemRef = self.ref.child(textField.text!.lowercased())
+                                        
+                                        for textField in self.alert.textFields! {
+                                            guard textField.text != "" else {
+                                                self.showAlertWith(title: " \(textField.placeholder!) is niet ingevuld", message: "Zorg ervoor dat alle velden ingevuld zijn.")
+                                                return
+                                            }
+                                        }
+                                        
+                                        let groceryItem = GroceryItem(name: firstNameTextField.text!, lastName: lastNameTextField.text!, address: addressTextField.text!, zipCode: zipCodeTextField.text!, city: cityTextField.text!, phoneNumber: phoneTextField.text!, addedByUser: emailTextField.text!, nearestWasteLocation: NearestWasteLocation(rawValue: locationTextField.text!)!.rawValue, completed: false, amountOfPlastic: 0, amountOfPaper: 0, amountOfTextile: 0, amountOfEWaste: 0, amountOfBioWaste: 0, uid: uuid, spentCoins: 0 )
+                                        let groceryItemRef = self.ref.child(firstNameTextField.text!.lowercased())
                                         groceryItemRef.setValue(groceryItem.toAnyObject())
         }
         
@@ -228,13 +244,44 @@ class GroceryListTableViewController: UITableViewController {
                                          style: .default) { (action: UIAlertAction!) -> Void in
         }
         
-        alert.addTextField {
-            (textField: UITextField!) -> Void in
-            textField.placeholder = "Voer gebruikersnaam in"
+        alert.addTextField { (firstNameTextField) in
+            firstNameTextField.placeholder = "Voornaam"
+            firstNameTextField.autocapitalizationType = .words
         }
-        alert.addTextField {
-            (textField2: UITextField!) -> Void in
-            textField2.placeholder = "Voer e-mailadres in"
+        alert.addTextField { (lastNameTextField)  in
+            lastNameTextField.placeholder = "Achternaam"
+            lastNameTextField.autocapitalizationType = .words
+        }
+        
+        alert.addTextField { (addressTextField) in
+            addressTextField.placeholder = "Adres en huisnummer"
+            addressTextField.autocapitalizationType = .words
+        }
+        
+        alert.addTextField { (zipCodeTextField) in
+            zipCodeTextField.placeholder = "Postcode"
+            zipCodeTextField.keyboardType = .numberPad
+            zipCodeTextField.autocapitalizationType = .allCharacters
+        }
+        
+        alert.addTextField { (cityTextField) in
+            cityTextField.placeholder = "WoonPlaats"
+            cityTextField.autocapitalizationType = .words
+        }
+        
+        alert.addTextField { (phoneTextField) in
+            phoneTextField.placeholder = "Telefoonnummer"
+            phoneTextField.keyboardType = .numberPad
+        }
+        
+        alert.addTextField { (emailTextField) in
+            emailTextField.placeholder = "Email"
+            emailTextField.keyboardType = .emailAddress
+        }
+        
+        alert.addTextField { (locationTextField) in
+            locationTextField.placeholder = "Selecteer een locatie"
+            locationTextField.inputView = self.locationsPickerView
         }
         
         alert.addAction(cancelAction)
@@ -246,8 +293,18 @@ class GroceryListTableViewController: UITableViewController {
     }
     
     func userCountButtonDidTouch() {
-        
         performSegue(withIdentifier: ListToUsers, sender: nil)
     }
+}
+
+// MARK: - PickerView delegate methods
+extension GroceryListTableViewController: UIPickerViewDelegate {
     
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return wasteLocations[row].rawValue
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        self.alert.textFields?[7].text = wasteLocations[row].rawValue
+    }
 }

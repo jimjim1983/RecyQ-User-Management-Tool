@@ -65,24 +65,20 @@ class GroceryDetailsViewController: UIViewController, UITableViewDelegate, UITab
         //        if let emailLabelText = groceryItem.name {
         //            emailLabel.text = "\(emailLabelText)"
         //        }
-        if let amountOfPlastic = groceryItem.amountOfPlastic {
-            plasticLabel.text = "\(amountOfPlastic)"
-        }
-        if let amountOfPaper = groceryItem.amountOfPaper {
-            paperLabel.text = "\(amountOfPaper)"
-        }
-        if let amountOfTextile = groceryItem.amountOfTextile {
-            textileLabel.text = "\(amountOfTextile)"
-        }
-        if let amountOfIron = groceryItem.amountOfIron {
-            ironLabel.text = "\(amountOfIron)"
-        }
-        if let amountOfEWaste = groceryItem.amountOfEWaste {
-            eWasteLabel.text = "\(amountOfEWaste)"
-        }
-        if let amountOfBioWaste = groceryItem.amountOfBioWaste {
-            bioWasteLabel.text = "\(amountOfBioWaste)"
-        }
+        let amountOfPlastic = groceryItem.amountOfPlastic
+        plasticLabel.text = "\(amountOfPlastic)"
+        
+        let amountOfPaper = groceryItem.amountOfPaper
+        paperLabel.text = "\(amountOfPaper)"
+        
+        let amountOfTextile = groceryItem.amountOfTextile
+        textileLabel.text = "\(amountOfTextile)"
+        
+        let amountOfEWaste = groceryItem.amountOfEWaste
+        eWasteLabel.text = "\(amountOfEWaste)"
+        
+        let amountOfBioWaste = groceryItem.amountOfBioWaste
+        bioWasteLabel.text = "\(amountOfBioWaste)"
         
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Annuleer", style: UIBarButtonItemStyle.plain, target: self, action: #selector(GroceryDetailsViewController.cancel))
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Opslaan", style: UIBarButtonItemStyle.plain, target: self, action: #selector(GroceryDetailsViewController.save))
@@ -99,7 +95,7 @@ class GroceryDetailsViewController: UIViewController, UITableViewDelegate, UITab
     func save() {
         
         let name = groceryItem.name
-        ref = FIRDatabase.database().reference(withPath: "clients").child(name!)
+        ref = FIRDatabase.database().reference(withPath: "clients").child(name)
         
         let amountOfPlastic = groceryItem.amountOfPlastic + ((plasticTextField.text)! as NSString).doubleValue
         ref.child("amountOfPlastic").setValue(amountOfPlastic)
@@ -112,10 +108,6 @@ class GroceryDetailsViewController: UIViewController, UITableViewDelegate, UITab
         let amountOfTextile = groceryItem.amountOfTextile + ((textileTextField.text)! as NSString).doubleValue
         ref.child( "amountOfTextile").setValue(amountOfTextile)
         self.groceryItem.amountOfTextile = amountOfTextile
-        
-        let amountOfIron = groceryItem.amountOfIron + ((ironTextField.text)! as NSString).doubleValue
-        ref.child( "amountOfIron").setValue(amountOfIron)
-        self.groceryItem.amountOfIron = amountOfIron
         
         let amountOfEWaste = groceryItem.amountOfEWaste + ((eWasteTextField.text)! as NSString).doubleValue
         ref.child( "amountOfEWaste").setValue(amountOfEWaste)

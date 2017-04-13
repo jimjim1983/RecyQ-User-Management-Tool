@@ -22,13 +22,19 @@
 
 import UIKit
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: Constants
     let LoginToList = "LoginToList"
     let ref = FIRDatabase.database().reference()
     
     let keychainItemWrapper = KeychainItemWrapper(identifier: "identifier for this item", accessGroup: "access group if shared")
+    
+    fileprivate var dataSource: PickerViewDataSource!
+    
+    var wasteLocations = [NearestWasteLocation]()
+    let locationsPickerView = UIPickerView()
+    var alert = UIAlertController()
     
     // MARK: Outlets
     @IBOutlet weak var textFieldLoginEmail: UITextField!
@@ -42,6 +48,11 @@ class LoginViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.keyboardWillShow(_:)), name:NSNotification.Name.UIKeyboardWillShow, object: self.view.window)
         NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: self.view.window)
+        
+        self.wasteLocations = [.amsterdamsePoort, .hBuurt, .holendrecht, .venserpolder]
+        self.dataSource = PickerViewDataSource(wasteLocations: self.wasteLocations)
+        self.locationsPickerView.dataSource = self.dataSource
+        self.locationsPickerView.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -61,8 +72,8 @@ class LoginViewController: UIViewController {
     // MARK: Actions
     @IBAction func loginDidTouch(_ sender: AnyObject) {
         
-        self.keychainItemWrapper["email"] = textFieldLoginEmail.text as AnyObject?
-        self.keychainItemWrapper["password"] = textFieldLoginPassword.text as AnyObject?
+        //self.keychainItemWrapper["email"] = textFieldLoginEmail.text as AnyObject?
+        //self.keychainItemWrapper["password"] = textFieldLoginPassword.text as AnyObject?
         
         if let email = textFieldLoginEmail.text, let password = textFieldLoginPassword.text {
             
@@ -81,15 +92,23 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func signUpDidTouch(_ sender: AnyObject) {
-        let alert = UIAlertController(title: "Register",
-                                      message: "Register",
+        self.alert = UIAlertController(title: "Registreer",
+                                      message: "Maak een account aan",
                                       preferredStyle: .alert)
         
-        let saveAction = UIAlertAction(title: "Save",
+        let saveAction = UIAlertAction(title: "Opslaan",
                                        style: .default) { (action: UIAlertAction!) -> Void in
                                         
-                                        let emailField = alert.textFields![0]
-                                        let passwordField = alert.textFields![1]
+                                        let emailField = self.alert.textFields![0]
+                                        let passwordField = self.alert.textFields![1]
+                                        let locationField = self.alert.textFields![2]
+                                        
+                                        for textField in self.alert.textFields! {
+                                            guard textField.text != "" else {
+                                                self.showAlertWith(title: " \(textField.placeholder!) is niet ingevuld", message: "Zorg ervoor dat alle velden ingevuld zijn.")
+                                                return
+                                            }
+                                        }
                                         
                                         if let email = emailField.text, let password = passwordField.text {
                                             
@@ -112,25 +131,30 @@ class LoginViewController: UIViewController {
                                         }
         }
         
-        let cancelAction = UIAlertAction(title: "Cancel",
+        let cancelAction = UIAlertAction(title: "Annuleer",
                                          style: .default) { (action: UIAlertAction!) -> Void in
         }
         
-        alert.addTextField {
-            (textEmail) -> Void in
-            textEmail.placeholder = "Enter your email"
+        self.alert.addTextField { (textEmail) in
+            textEmail.placeholder = "Email"
         }
         
-        alert.addTextField {
-            (textPassword) -> Void in
+        self.alert.addTextField { (textPassword) in
             textPassword.isSecureTextEntry = true
-            textPassword.placeholder = "Enter your password"
+            textPassword.placeholder = "Wachtwoord"
         }
         
-        alert.addAction(saveAction)
-        alert.addAction(cancelAction)
+        self.alert.addTextField { (textLocation) in
+            textLocation.delegate = self
+            textLocation.placeholder = "Selecteer uw locatie"
+            textLocation.inputView = self.locationsPickerView
+
+        }
         
-        present(alert,
+        self.alert.addAction(saveAction)
+        self.alert.addAction(cancelAction)
+        
+        present(self.alert,
                 animated: true,
                 completion: nil)
     }
@@ -161,5 +185,17 @@ class LoginViewController: UIViewController {
         print(self.view.frame.origin.y)
     }
     
+}
+
+// MARK: - PickerView delegate methods
+extension LoginViewController: UIPickerViewDelegate {
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return wasteLocations[row].rawValue
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        self.alert.textFields?[2].text = wasteLocations[row].rawValue
+    }
 }
 

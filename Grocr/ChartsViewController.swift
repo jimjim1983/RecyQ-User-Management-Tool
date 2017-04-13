@@ -30,7 +30,7 @@ class ChartsViewController: UIViewController, ChartViewDelegate, IAxisValueForma
         
         self.barChartView.delegate = self
         self.barChartView.xAxis.valueFormatter = self
-        self.wasteArray = ["Plastic", "Paper", "Textile", "Iron", "BioWaste", "EWaste"]
+        self.wasteArray = ["Plastic", "Paper", "Textile", "BioWaste", "EWaste"]
         self.setChart(dataPoints: self.wasteArray, values: amounts)
     }
     
@@ -47,16 +47,18 @@ class ChartsViewController: UIViewController, ChartViewDelegate, IAxisValueForma
         var dataEntries: [BarChartDataEntry] = []
         
         for i in 0..<dataPoints.count {
+            print(dataPoints.count)
             let dataEntry = BarChartDataEntry(x: Double(i), y: values[i])
             
             dataEntries.append(dataEntry)
+            print(dataEntries.count)
         }
         
         let chartDataSet = BarChartDataSet(values: dataEntries, label: "Amounts")
         let chartData = BarChartData(dataSet: chartDataSet)
         barChartView.data = chartData
         
-        let colors = [#colorLiteral(red: 0, green: 0.8078528643, blue: 0.427520901, alpha: 1), #colorLiteral(red: 0, green: 0.7605165839, blue: 1, alpha: 1), #colorLiteral(red: 1, green: 0.8486332297, blue: 0.249439925, alpha: 1), #colorLiteral(red: 1, green: 0.4083568454, blue: 0.251519829, alpha: 1), #colorLiteral(red: 0.506552279, green: 0.5065647364, blue: 0.5065580606, alpha: 1), #colorLiteral(red: 0.9593952298, green: 0.9594177604, blue: 0.959405601, alpha: 1)]
+        let colors = [#colorLiteral(red: 0, green: 0.8078528643, blue: 0.427520901, alpha: 1), #colorLiteral(red: 0, green: 0.7605165839, blue: 1, alpha: 1), #colorLiteral(red: 1, green: 0.8486332297, blue: 0.249439925, alpha: 1), #colorLiteral(red: 1, green: 0.4083568454, blue: 0.251519829, alpha: 1), #colorLiteral(red: 0.506552279, green: 0.5065647364, blue: 0.5065580606, alpha: 1)]
         
         chartDataSet.colors = colors //ChartColorTemplates.colorful() //[UIColor(red: 230/255, green: 126/255, blue: 34/255, alpha: 1)]
         barChartView.xAxis.labelPosition = .bottom
@@ -91,7 +93,7 @@ class ChartsViewController: UIViewController, ChartViewDelegate, IAxisValueForma
 extension ChartsViewController: GroceryDetailsViewControllerProtocol {
     func didFinishAddingWasteItems(sender: GroceryDetailsViewController) {
         self.groceryItem = sender.groceryItem
-        self.updatedAmounts = [groceryItem.amountOfPlastic, groceryItem.amountOfPaper, groceryItem.amountOfTextile, groceryItem.amountOfIron, groceryItem.amountOfBioWaste, groceryItem.amountOfEWaste]
+        self.updatedAmounts = [groceryItem.amountOfPlastic, groceryItem.amountOfPaper, groceryItem.amountOfTextile, groceryItem.amountOfBioWaste, groceryItem.amountOfEWaste]
         setChart(dataPoints: self.wasteArray, values: updatedAmounts!)
     }
 }
