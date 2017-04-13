@@ -11,6 +11,7 @@
 		2B46759F1E9F5A6F00240DB2 /* PickerViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B46759E1E9F5A6F00240DB2 /* PickerViewDataSource.swift */; };
 		2B4C17B41E5B108000F34CC2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2B4C17B31E5B108000F34CC2 /* GoogleService-Info.plist */; };
 		2B6DE5C91E9F708500784487 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6DE5C81E9F708500784487 /* Extensions.swift */; };
+		2B6DE5CD1E9F754900784487 /* Admin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6DE5CC1E9F754900784487 /* Admin.swift */; };
 		2B9060EE1E62E9070007BEB4 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B9060E91E62E8E90007BEB4 /* Charts.framework */; };
 		2B9060EF1E62E9070007BEB4 /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2B9060E91E62E8E90007BEB4 /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2B9060F41E62E92E0007BEB4 /* ChartsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B9060F31E62E92E0007BEB4 /* ChartsViewController.swift */; };
@@ -80,6 +81,7 @@
 		2B46759E1E9F5A6F00240DB2 /* PickerViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerViewDataSource.swift; sourceTree = "<group>"; };
 		2B4C17B31E5B108000F34CC2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2B6DE5C81E9F708500784487 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		2B6DE5CC1E9F754900784487 /* Admin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Admin.swift; sourceTree = "<group>"; };
 		2B9060E21E62E8E80007BEB4 /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Charts.xcodeproj; path = "../../../Downloads/Charts-master/Charts.xcodeproj"; sourceTree = "<group>"; };
 		2B9060F31E62E92E0007BEB4 /* ChartsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartsViewController.swift; sourceTree = "<group>"; };
 		2B9060F71E62EB5C0007BEB4 /* KeychainItemWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainItemWrapper.swift; sourceTree = "<group>"; };
@@ -204,6 +206,7 @@
 			children = (
 				BB2385891B3DD9640079CD01 /* GroceryItem.swift */,
 				BB7DA5101B42C8100018B530 /* User.swift */,
+				2B6DE5CC1E9F754900784487 /* Admin.swift */,
 				A695FB8D1CCE2AE20043B6AC /* Coupon.swift */,
 			);
 			name = Models;
@@ -415,6 +418,7 @@
 				BB2385641B3DD5AB0079CD01 /* LoginViewController.swift in Sources */,
 				2B46759F1E9F5A6F00240DB2 /* PickerViewDataSource.swift in Sources */,
 				2B9060F41E62E92E0007BEB4 /* ChartsViewController.swift in Sources */,
+				2B6DE5CD1E9F754900784487 /* Admin.swift in Sources */,
 				BB2385841B3DD8660079CD01 /* GroceryListTableViewController.swift in Sources */,
 				A695FB8E1CCE2AE20043B6AC /* Coupon.swift in Sources */,
 				2B9060F81E62EB5C0007BEB4 /* KeychainItemWrapper.swift in Sources */,

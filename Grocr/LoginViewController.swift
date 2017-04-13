@@ -22,11 +22,12 @@
 
 import UIKit
 
-class LoginViewController: UIViewController, UITextFieldDelegate {
+class LoginViewController: UIViewController {
     
     // MARK: Constants
     let LoginToList = "LoginToList"
     let ref = FIRDatabase.database().reference()
+    let adminRef = FIRDatabase.database().reference(withPath: "admins")
     
     let keychainItemWrapper = KeychainItemWrapper(identifier: "identifier for this item", accessGroup: "access group if shared")
     
@@ -83,8 +84,16 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                     return
                 }
                 if user != nil {
-                    self.performSegue(withIdentifier: self.LoginToList, sender: nil)
-                    print("login succesful")
+                    self.adminRef.queryOrdered(byChild: "email").queryEqual(toValue: self.textFieldLoginEmail.text).observe(.value, with: { (snapShot) in
+                        if snapShot.exists() {
+                            self.performSegue(withIdentifier: self.LoginToList, sender: nil)
+                            print("login succesful")
+                        }
+                        else {
+                            self.showAlertWith(title: "Fout", message: "Met het ingevoerde email adres: \(self.textFieldLoginEmail.text!) heeft u geen toegang)")
+                        }
+                    })
+                    
                 }
                 
             })
@@ -99,9 +108,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         let saveAction = UIAlertAction(title: "Opslaan",
                                        style: .default) { (action: UIAlertAction!) -> Void in
                                         
-                                        let emailField = self.alert.textFields![0]
-                                        let passwordField = self.alert.textFields![1]
+                                        let firstNameField = self.alert.textFields![0]
+                                        let lastNameField = self.alert.textFields![1]
                                         let locationField = self.alert.textFields![2]
+                                        let emailField = self.alert.textFields![3]
+                                        let passwordField = self.alert.textFields![4]
                                         
                                         for textField in self.alert.textFields! {
                                             guard textField.text != "" else {
@@ -123,6 +134,15 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                                                             print("Error loggin user in: \(error?.localizedDescription)")
                                                             return
                                                         }
+                                                        else {
+                                                            let newAdmin = Admin(firstName: firstNameField.text!, lastName: lastNameField.text!, email: emailField.text!, location: locationField.text!)
+                                                            
+                                                            let ref = self.adminRef.child(firstNameField.text!.lowercased())
+                                                            ref.setValue(newAdmin.toAnyObject())
+                                                            
+                                                            self.performSegue(withIdentifier: self.LoginToList, sender: nil)
+                                                            print("login succesful")
+                                                        }
                                                         
                                                     })
                                                     
@@ -135,20 +155,29 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                                          style: .default) { (action: UIAlertAction!) -> Void in
         }
         
-        self.alert.addTextField { (textEmail) in
-            textEmail.placeholder = "Email"
+        self.alert.addTextField { (firstNameField) in
+            firstNameField.placeholder = "Voornaam"
+            firstNameField.autocapitalizationType = .words
         }
         
-        self.alert.addTextField { (textPassword) in
-            textPassword.isSecureTextEntry = true
-            textPassword.placeholder = "Wachtwoord"
+        self.alert.addTextField { (lastNameField) in
+            lastNameField.placeholder = "Achternaam"
+            lastNameField.autocapitalizationType = .words
         }
         
-        self.alert.addTextField { (textLocation) in
-            textLocation.delegate = self
-            textLocation.placeholder = "Selecteer uw locatie"
-            textLocation.inputView = self.locationsPickerView
-
+        self.alert.addTextField { (locationField) in
+            locationField.placeholder = "Selecteer uw locatie"
+            locationField.inputView = self.locationsPickerView
+        }
+        
+        self.alert.addTextField { (emailField) in
+            emailField.placeholder = "Email"
+            emailField.keyboardType = .emailAddress
+        }
+        
+        self.alert.addTextField { (passwordField) in
+            passwordField.placeholder = "Wachtwoord"
+            passwordField.isSecureTextEntry = true
         }
         
         self.alert.addAction(saveAction)

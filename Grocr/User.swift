@@ -22,13 +22,6 @@
 
 import Foundation
 
-enum NearestWasteLocation: String {
-    case amsterdamsePoort = "A'damse Poort"
-    case hBuurt = "H-Buurt"
-    case holendrecht = "Holendrecht"
-    case venserpolder = "Venserpolder"
-}
-
 struct User {
   let uid: String
   let email: String
