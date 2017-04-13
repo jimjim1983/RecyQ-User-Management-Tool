@@ -23,3 +23,13 @@ struct Admin {
         ]
     }
 }
+
+extension Admin {
+    init(snapshot: FIRDataSnapshot) {
+        let snapshotValue = snapshot.value as? NSDictionary
+        firstName = snapshotValue?["firstName"] as! String
+        lastName = snapshotValue?["lastName"] as! String
+        email = snapshotValue?["email"] as! String
+        location = snapshotValue?["location"] as! String
+    }
+}

@@ -33,6 +33,7 @@ class GroceryListTableViewController: UITableViewController {
     var items = [GroceryItem]()
     var user: User!
     var userCountBarButtonItem: UIBarButtonItem!
+    var admin: Admin!
     
     fileprivate var dataSource: PickerViewDataSource!
     var wasteLocations = [NearestWasteLocation]()
@@ -44,11 +45,8 @@ class GroceryListTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        
         // Set up swipe to delete
         tableView.allowsMultipleSelectionDuringEditing = false
-        
         self.wasteLocations = [.amsterdamsePoort, .hBuurt, .holendrecht, .venserpolder]
         self.dataSource = PickerViewDataSource(wasteLocations: self.wasteLocations)
         self.locationsPickerView.dataSource = self.dataSource
@@ -161,10 +159,10 @@ class GroceryListTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        //        let groceryDetailVC = GroceryDetailsViewController()
         let chartsVC = self.storyboard?.instantiateViewController(withIdentifier: "chartsVC") as! ChartsViewController
         let groceryItems = items[indexPath.row]
         let wasteAmounts: [Double] = [groceryItems.amountOfPlastic, groceryItems.amountOfPaper, groceryItems.amountOfTextile, groceryItems.amountOfBioWaste, groceryItems.amountOfEWaste]
+        chartsVC.admin = self.admin
         chartsVC.amounts = wasteAmounts
         chartsVC.groceryItem = groceryItems
         //        groceryDetailVC.groceryItem = groceryItems
@@ -235,7 +233,7 @@ class GroceryListTableViewController: UITableViewController {
                                             }
                                         }
                                         
-                                        let groceryItem = GroceryItem(name: firstNameTextField.text!, lastName: lastNameTextField.text!, address: addressTextField.text!, zipCode: zipCodeTextField.text!, city: cityTextField.text!, phoneNumber: phoneTextField.text!, addedByUser: emailTextField.text!, nearestWasteLocation: NearestWasteLocation(rawValue: locationTextField.text!)!.rawValue, completed: false, amountOfPlastic: 0, amountOfPaper: 0, amountOfTextile: 0, amountOfEWaste: 0, amountOfBioWaste: 0, uid: uuid, spentCoins: 0 )
+                                        let groceryItem = GroceryItem(name: firstNameTextField.text!, lastName: lastNameTextField.text!, address: addressTextField.text!, zipCode: zipCodeTextField.text!, city: cityTextField.text!, phoneNumber: phoneTextField.text!, addedByUser: emailTextField.text!, nearestWasteLocation: NearestWasteLocation(rawValue: locationTextField.text!)!.rawValue, completed: false, amountOfPlastic: 0, amountOfPaper: 0, amountOfTextile: 0, amountOfEWaste: 0, amountOfBioWaste: 0, wasteDepositInfo: ["":""], uid: uuid, spentCoins: 0 )
                                         let groceryItemRef = self.ref.child(firstNameTextField.text!.lowercased())
                                         groceryItemRef.setValue(groceryItem.toAnyObject())
         }

@@ -12,7 +12,8 @@ import Charts
 class ChartsViewController: UIViewController, ChartViewDelegate, IAxisValueFormatter {
 
     @IBOutlet var barChartView: BarChartView!
-        
+    
+    var admin: Admin!
     var groceryItem: GroceryItem!
     var wasteArray: [String]!
     var amounts: [Double]!
@@ -37,6 +38,7 @@ class ChartsViewController: UIViewController, ChartViewDelegate, IAxisValueForma
     func showGroceryDetailVC() {
         let groceryDetailsVC = GroceryDetailsViewController(nibName: "GroceryDetailsViewController", bundle: nil)
         groceryDetailsVC.delegate = self
+        groceryDetailsVC.admin = self.admin
         groceryDetailsVC.groceryItem = self.groceryItem
         self.navigationController?.pushViewController(groceryDetailsVC, animated: true)
     }

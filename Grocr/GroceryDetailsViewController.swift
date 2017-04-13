@@ -17,6 +17,7 @@ var couponName = String()
 class GroceryDetailsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     weak var delegate: GroceryDetailsViewControllerProtocol?
+    var admin: Admin!
     
     var groceryItem: GroceryItem!
     var ref = FIRDatabase.database().reference(withPath: "clients")
@@ -42,6 +43,13 @@ class GroceryDetailsViewController: UIViewController, UITableViewDelegate, UITab
     
     @IBOutlet var tableView: UITableView!
     
+    lazy var dateFormatter: DateFormatter = {
+    let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .medium
+        return dateFormatter
+    }()
+    
     
     override func viewWillAppear(_ animated: Bool) {
         
@@ -57,7 +65,6 @@ class GroceryDetailsViewController: UIViewController, UITableViewDelegate, UITab
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         tableView.dataSource = self
         tableView.delegate = self
         emailLabel.text = groceryItem.name
@@ -116,6 +123,19 @@ class GroceryDetailsViewController: UIViewController, UITableViewDelegate, UITab
         let amountOfBioWaste = groceryItem.amountOfBioWaste + ((bioWasteTextField.text)! as NSString).doubleValue
         ref.child( "amountOfBioWaste").setValue(amountOfBioWaste)
         self.groceryItem.amountOfBioWaste = amountOfBioWaste
+        
+        let adminName = self.admin.firstName + " " + self.admin.lastName
+        let wasteDepositInfo: [String: Any] = [
+            "Admin": adminName,
+            "Datum": self.dateFormatter.string(from: Date()),
+            "Locatie": self.admin.location,
+            "Plastic": ((plasticTextField.text)! as NSString).doubleValue,
+            "Papier": ((paperTextField.text)! as NSString).doubleValue,
+            "Textiel": ((textileTextField.text)! as NSString).doubleValue,
+            "E-Waste": ((eWasteTextField.text)! as NSString).doubleValue,
+            "Bio": ((bioWasteTextField.text)! as NSString).doubleValue]
+        
+        ref.child("wasteDepositInfo").childByAutoId().setValue(wasteDepositInfo)
         
         if let delegate = self.delegate {
             delegate.didFinishAddingWasteItems(sender: self)

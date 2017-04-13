@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Grocr/ChartsViewController.swift"
-            timestampString = "513704268.493356"
+            timestampString = "513785469.477725"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "99"
-            endingLineNumber = "99"
+            startingLineNumber = "101"
+            endingLineNumber = "101"
             landmarkName = "ChartsViewController"
             landmarkType = "4">
          </BreakpointContent>

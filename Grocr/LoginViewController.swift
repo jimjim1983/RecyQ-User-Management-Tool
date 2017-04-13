@@ -28,6 +28,7 @@ class LoginViewController: UIViewController {
     let LoginToList = "LoginToList"
     let ref = FIRDatabase.database().reference()
     let adminRef = FIRDatabase.database().reference(withPath: "admins")
+    var admin: Admin!
     
     let keychainItemWrapper = KeychainItemWrapper(identifier: "identifier for this item", accessGroup: "access group if shared")
     
@@ -84,10 +85,12 @@ class LoginViewController: UIViewController {
                     return
                 }
                 if user != nil {
-                    self.adminRef.queryOrdered(byChild: "email").queryEqual(toValue: self.textFieldLoginEmail.text).observe(.value, with: { (snapShot) in
+                    self.adminRef.queryOrdered(byChild: "email").queryEqual(toValue: self.textFieldLoginEmail.text).observe(.childAdded, with: { (snapShot) in
                         if snapShot.exists() {
+                            self.admin = Admin(snapshot: snapShot)
                             self.performSegue(withIdentifier: self.LoginToList, sender: nil)
                             print("login succesful")
+                            print(self.admin)
                         }
                         else {
                             self.showAlertWith(title: "Fout", message: "Met het ingevoerde email adres: \(self.textFieldLoginEmail.text!) heeft u geen toegang)")
@@ -214,6 +217,13 @@ class LoginViewController: UIViewController {
         print(self.view.frame.origin.y)
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "LoginToList" {
+            if let navigationController = segue.destination as? UINavigationController, let listVC = navigationController.viewControllers.first as? GroceryListTableViewController {
+            listVC.admin = self.admin
+            }
+        }
+    }
 }
 
 // MARK: - PickerView delegate methods
