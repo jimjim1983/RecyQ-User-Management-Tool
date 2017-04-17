@@ -133,11 +133,11 @@
                                 <rect key="frame" x="0.0" y="22" width="768" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dnS-eE-HD5" id="veR-bH-IJF">
-                                    <rect key="frame" x="0.0" y="0.0" width="768" height="60"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="768" height="59"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="v0P-3e-z2r">
-                                            <rect key="frame" x="48" y="0.0" width="672" height="59.5"/>
+                                            <rect key="frame" x="48" y="0.0" width="672" height="59"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="18"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -170,7 +170,7 @@
                                 <rect key="frame" x="0.0" y="22" width="768" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="en3-w1-wtA" id="l9k-nz-0Yb">
-                                    <rect key="frame" x="0.0" y="0.0" width="768" height="60"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="768" height="59"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="lFS-Be-nny">
@@ -181,7 +181,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="EUL-DG-a4q">
-                                            <rect key="frame" x="48" y="34" width="41.5" height="16.5"/>
+                                            <rect key="frame" x="48" y="34" width="42" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="12"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -197,6 +197,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Recyq User Management Tool" id="OJg-kh-Sh2">
+                        <barButtonItem key="leftBarButtonItem" title="Log uit" id="Ueq-C8-PUR">
+                            <connections>
+                                <action selector="logOutButtonTapped:" destination="WRG-qR-ebT" id="EZN-kn-pLR"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="QGM-U2-dHv">
                             <color key="tintColor" red="0.81096994876861572" green="0.55850845575332642" blue="0.15456500649452209" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <connections>

@@ -21,6 +21,7 @@
  */
 
 import UIKit
+import FirebaseAuth
 
 class GroceryListTableViewController: UITableViewController {
     
@@ -288,6 +289,18 @@ class GroceryListTableViewController: UITableViewController {
         present(alert,
                 animated: true,
                 completion: nil)
+    }
+    @IBAction func logOutButtonTapped(_ sender: Any) {
+        
+        // Log out from firebase
+        let firebaseAuth = FIRAuth.auth()
+        do {
+            try firebaseAuth?.signOut()
+            dismiss(animated: true, completion: nil)
+        } catch let signOutError as NSError {
+            print ("Error signing out: %@", signOutError)
+            return
+        }
     }
     
     func userCountButtonDidTouch() {

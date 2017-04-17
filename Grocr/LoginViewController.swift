@@ -1,36 +1,20 @@
-/*
- * Copyright (c) 2015 Razeware LLC
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
+//
+//  LoginViewController.swift
+//  RecyQ User Management Tool
+//
+//  Created by Supervisor on 26-02-17.
+//  Copyright © 2017 Razeware LLC. All rights reserved.
+//
 
 import UIKit
 
 class LoginViewController: UIViewController {
     
     // MARK: Constants
-    let LoginToList = "LoginToList"
+    let logInToList = "LoginToList"
     let ref = FIRDatabase.database().reference()
     let adminRef = FIRDatabase.database().reference(withPath: "admins")
     var admin: Admin!
-    
-    let keychainItemWrapper = KeychainItemWrapper(identifier: "identifier for this item", accessGroup: "access group if shared")
     
     fileprivate var dataSource: PickerViewDataSource!
     
@@ -59,6 +43,8 @@ class LoginViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.textFieldLoginEmail.text = ""
+        self.textFieldLoginPassword.text = ""
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -88,7 +74,7 @@ class LoginViewController: UIViewController {
                     self.adminRef.queryOrdered(byChild: "email").queryEqual(toValue: self.textFieldLoginEmail.text).observe(.childAdded, with: { (snapShot) in
                         if snapShot.exists() {
                             self.admin = Admin(snapshot: snapShot)
-                            self.performSegue(withIdentifier: self.LoginToList, sender: nil)
+                            self.performSegue(withIdentifier: self.logInToList, sender: nil)
                             print("login succesful")
                             print(self.admin)
                         }
@@ -143,7 +129,7 @@ class LoginViewController: UIViewController {
                                                             let ref = self.adminRef.child(firstNameField.text!.lowercased())
                                                             ref.setValue(newAdmin.toAnyObject())
                                                             
-                                                            self.performSegue(withIdentifier: self.LoginToList, sender: nil)
+                                                            self.performSegue(withIdentifier: self.logInToList, sender: nil)
                                                             print("login succesful")
                                                         }
                                                         
@@ -218,7 +204,7 @@ class LoginViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "LoginToList" {
+        if segue.identifier == self.logInToList {
             if let navigationController = segue.destination as? UINavigationController, let listVC = navigationController.viewControllers.first as? GroceryListTableViewController {
             listVC.admin = self.admin
             }

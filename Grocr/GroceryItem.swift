@@ -119,5 +119,4 @@ struct GroceryItem {
             "spentCoins": spentCoins as AnyObject
         ]
     }
-    
 }
