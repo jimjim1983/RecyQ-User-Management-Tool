@@ -62,19 +62,22 @@ class LoginViewController: UIViewController {
         
         //self.keychainItemWrapper["email"] = textFieldLoginEmail.text as AnyObject?
         //self.keychainItemWrapper["password"] = textFieldLoginPassword.text as AnyObject?
-        
+        let goToListAction = UIAlertAction(title: "Verder", style: .default) { (goToListAction) in
+            self.performSegue(withIdentifier: self.logInToList, sender: nil)
+        }
         if let email = textFieldLoginEmail.text, let password = textFieldLoginPassword.text {
             
             FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user, error) in
                 if error != nil {
                     print("Error loggin user in: \(error?.localizedDescription)")
+                    self.showAlertWith(title: "Error", message: (error?.localizedDescription)!)
                     return
                 }
                 if user != nil {
                     self.adminRef.queryOrdered(byChild: "email").queryEqual(toValue: self.textFieldLoginEmail.text).observe(.childAdded, with: { (snapShot) in
                         if snapShot.exists() {
                             self.admin = Admin(snapshot: snapShot)
-                            self.performSegue(withIdentifier: self.logInToList, sender: nil)
+                            self.showAlertWith(title: "Welkom \(self.admin.firstName.capitalized)", message: "Je inlog poging is succesvol.", actions: [goToListAction])
                             print("login succesful")
                             print(self.admin)
                         }
@@ -82,7 +85,6 @@ class LoginViewController: UIViewController {
                             self.showAlertWith(title: "Fout", message: "Met het ingevoerde email adres: \(self.textFieldLoginEmail.text!) heeft u geen toegang)")
                         }
                     })
-                    
                 }
                 
             })
@@ -93,6 +95,10 @@ class LoginViewController: UIViewController {
         self.alert = UIAlertController(title: "Registreer",
                                       message: "Maak een account aan",
                                       preferredStyle: .alert)
+        
+        let showSignUpAlert = UIAlertAction(title: "Ok", style: .default, handler: { (showSignUpAlert) in
+            self.present(self.alert, animated: true, completion: nil)
+        })
         
         let saveAction = UIAlertAction(title: "Opslaan",
                                        style: .default) { (action: UIAlertAction!) -> Void in
@@ -105,7 +111,7 @@ class LoginViewController: UIViewController {
                                         
                                         for textField in self.alert.textFields! {
                                             guard textField.text != "" else {
-                                                self.showAlertWith(title: " \(textField.placeholder!) is niet ingevuld", message: "Zorg ervoor dat alle velden ingevuld zijn.")
+                                                self.showAlertWith(title: " \(textField.placeholder!) is niet ingevuld", message: "Zorg ervoor dat alle velden ingevuld zijn.", actions: [showSignUpAlert])
                                                 return
                                             }
                                         }
@@ -114,6 +120,7 @@ class LoginViewController: UIViewController {
                                             
                                             FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user, error) in
                                                 if error != nil {
+                                                    self.showAlertWith(title: "Error", message: (error?.localizedDescription)!, actions: [showSignUpAlert])
                                                     print("Error signing user in: \(error?.localizedDescription)")
                                                     return
                                                 }
@@ -121,6 +128,8 @@ class LoginViewController: UIViewController {
                                                     FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user, error) in
                                                         if error != nil {
                                                             print("Error loggin user in: \(error?.localizedDescription)")
+                                                            self.showAlertWith(title: "Error", message: (error?.localizedDescription)!, actions: [showSignUpAlert])
+
                                                             return
                                                         }
                                                         else {
@@ -129,12 +138,14 @@ class LoginViewController: UIViewController {
                                                             let ref = self.adminRef.child(firstNameField.text!.lowercased())
                                                             ref.setValue(newAdmin.toAnyObject())
                                                             
-                                                            self.performSegue(withIdentifier: self.logInToList, sender: nil)
+                                                            let goToListAction = UIAlertAction(title: "Verder", style: .default) { (goToListAction) in
+                                                                self.performSegue(withIdentifier: self.logInToList, sender: nil)
+                                                            }
+                                                            self.showAlertWith(title: "Welkom \(newAdmin.firstName.capitalized)", message: "Je registratie poging is succesvol.", actions: [goToListAction])
+                                                            
                                                             print("login succesful")
                                                         }
-                                                        
                                                     })
-                                                    
                                                 }
                                             })
                                         }

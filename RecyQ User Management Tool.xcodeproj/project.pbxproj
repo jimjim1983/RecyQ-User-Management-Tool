@@ -277,6 +277,7 @@
 						CreatedOnToolsVersion = 6.3.1;
 						DevelopmentTeam = HZWL927386;
 						LastSwiftMigration = 0820;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Keychain = {
 								enabled = 1;
@@ -567,6 +568,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = nl.theappacademy.recyqusertool;
 				PRODUCT_NAME = "RecyQ User Management Tool";
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Grocr/Grocr-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
@@ -592,6 +594,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = nl.theappacademy.recyqusertool;
 				PRODUCT_NAME = "RecyQ User Management Tool";
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Grocr/Grocr-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
