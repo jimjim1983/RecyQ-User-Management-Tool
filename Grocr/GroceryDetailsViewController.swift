@@ -106,7 +106,7 @@ class GroceryDetailsViewController: UIViewController, UITableViewDelegate, UITab
     
     func save() {
         
-        let name = groceryItem.name
+        let name = groceryItem.name.lowercased()
         ref = FIRDatabase.database().reference(withPath: "clients").child(name)
         
         let amountOfPlastic = groceryItem.amountOfPlastic + ((plasticTextField.text)! as NSString).doubleValue
