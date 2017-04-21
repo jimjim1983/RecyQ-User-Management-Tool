@@ -234,7 +234,7 @@ class GroceryListTableViewController: UITableViewController {
                                             }
                                         }
                                         
-                                        let groceryItem = GroceryItem(name: firstNameTextField.text!, lastName: lastNameTextField.text!, address: addressTextField.text!, zipCode: zipCodeTextField.text!, city: cityTextField.text!, phoneNumber: phoneTextField.text!, addedByUser: emailTextField.text!, nearestWasteLocation: NearestWasteLocation(rawValue: locationTextField.text!)!.rawValue, completed: false, amountOfPlastic: 0, amountOfPaper: 0, amountOfTextile: 0, amountOfEWaste: 0, amountOfBioWaste: 0, wasteDepositInfo: nil, uid: uuid, spentCoins: 0 )
+                                        let groceryItem = GroceryItem(name: firstNameTextField.text!.lowercased(), lastName: lastNameTextField.text!, address: addressTextField.text!, zipCode: zipCodeTextField.text!, city: cityTextField.text!, phoneNumber: phoneTextField.text!, addedByUser: emailTextField.text!, nearestWasteLocation: NearestWasteLocation(rawValue: locationTextField.text!)!.rawValue, completed: false, amountOfPlastic: 0, amountOfPaper: 0, amountOfTextile: 0, amountOfEWaste: 0, amountOfBioWaste: 0, wasteDepositInfo: nil, uid: uuid, spentCoins: 0 )
                                         let groceryItemRef = self.ref.child(firstNameTextField.text!.lowercased())
                                         groceryItemRef.setValue(groceryItem.toAnyObject())
         }
