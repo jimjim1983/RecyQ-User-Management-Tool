@@ -113,7 +113,13 @@ class GroceryListTableViewController: UITableViewController {
         let groceryItem = items[indexPath.row]
         let wasteTotal = Double(groceryItem.amountOfBioWaste) + Double(groceryItem.amountOfEWaste) +  Double(groceryItem.amountOfPaper) + Double(groceryItem.amountOfPlastic) + Double(groceryItem.amountOfTextile)
         
-        cell.textLabel?.text = groceryItem.name
+        if groceryItem.lastName?.capitalized != nil {
+            cell.textLabel?.text = (groceryItem.name.capitalized) + " " + (groceryItem.lastName!.capitalized)
+        }
+        else {
+            cell.textLabel?.text = groceryItem.name.capitalized
+        }
+        
         cell.detailTextLabel?.textColor = UIColor.darkGray
         
         if wasteTotal >= 1 {

@@ -67,7 +67,12 @@ class GroceryDetailsViewController: UIViewController, UITableViewDelegate, UITab
         super.viewDidLoad()
         tableView.dataSource = self
         tableView.delegate = self
-        emailLabel.text = groceryItem.name
+        if groceryItem.lastName != nil {
+            emailLabel.text = (groceryItem.name.capitalized.characters.first?.description)! + ". " + (groceryItem.lastName?.capitalized)!
+        }
+        else {
+            emailLabel.text = groceryItem.name.capitalized
+        }
         
         //        if let emailLabelText = groceryItem.name {
         //            emailLabel.text = "\(emailLabelText)"

@@ -63,6 +63,7 @@ class LoginViewController: UIViewController {
         //self.keychainItemWrapper["email"] = textFieldLoginEmail.text as AnyObject?
         //self.keychainItemWrapper["password"] = textFieldLoginPassword.text as AnyObject?
         let goToListAction = UIAlertAction(title: "Verder", style: .default) { (goToListAction) in
+            self.performSegue(withIdentifier: self.logInToList, sender: nil)
         }
         if let email = textFieldLoginEmail.text, let password = textFieldLoginPassword.text {
             
@@ -76,9 +77,7 @@ class LoginViewController: UIViewController {
                     self.adminRef.queryOrdered(byChild: "email").queryEqual(toValue: self.textFieldLoginEmail.text).observe(.childAdded, with: { (snapShot) in
                         if snapShot.exists() {
                             self.admin = Admin(snapshot: snapShot)
-                            //self.showAlertWith(title: "Welkom \(self.admin.firstName.capitalized)", message: "Je inlog poging is succesvol.", actions: [goToListAction])
-                            self.performSegue(withIdentifier: self.logInToList, sender: nil)
-
+                            self.showAlertWith(title: "Welkom \(self.admin.firstName.capitalized)", message: "Je inlog poging is succesvol.", actions: [goToListAction])
                             print("login succesful")
                             print(self.admin)
                         }

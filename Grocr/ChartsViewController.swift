@@ -25,7 +25,13 @@ class ChartsViewController: UIViewController, ChartViewDelegate, IAxisValueForma
     }
     
     private func setupViews() {
-        self.title = groceryItem.name
+        
+        if groceryItem.lastName != nil {
+            self.title = groceryItem.name.capitalized + " " + (groceryItem.lastName?.capitalized)!
+        }
+        else {
+            self.title = groceryItem.name.capitalized
+        }
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(showGroceryDetailVC))
         self.navigationController?.navigationBar.backItem?.title = "Anything Else"
         
