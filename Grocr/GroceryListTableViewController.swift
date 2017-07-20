@@ -40,7 +40,14 @@ class GroceryListTableViewController: UITableViewController {
     var wasteLocations = [NearestWasteLocation]()
     let locationsPickerView = UIPickerView()
     var alert = UIAlertController()
-
+    var receivedBags = false
+    
+    lazy var dateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .none
+        return dateFormatter
+    }()
     
     // MARK: UIViewController Lifecycle
     
@@ -60,6 +67,11 @@ class GroceryListTableViewController: UITableViewController {
         ref.queryOrdered(byChild: "name").observe(.value, with: { snapshot in
             var newItems = [GroceryItem]()
             for item in (snapshot.children) {
+
+//                let itemTest = item as! FIRDataSnapshot
+//                if itemTest.key  == "henk" {
+//                   itemTest.ref.removeValue()
+//                }
                 let groceryItem = GroceryItem(snapshot: item as! FIRDataSnapshot)
                 newItems.append(groceryItem)
             }
@@ -240,9 +252,29 @@ class GroceryListTableViewController: UITableViewController {
                                             }
                                         }
                                         
-                                        let groceryItem = GroceryItem(name: firstNameTextField.text!.lowercased(), lastName: lastNameTextField.text!, address: addressTextField.text!, zipCode: zipCodeTextField.text!, city: cityTextField.text!, phoneNumber: phoneTextField.text!, addedByUser: emailTextField.text!, nearestWasteLocation: NearestWasteLocation(rawValue: locationTextField.text!)!.rawValue, completed: false, amountOfPlastic: 0, amountOfPaper: 0, amountOfTextile: 0, amountOfEWaste: 0, amountOfBioWaste: 0, wasteDepositInfo: nil, uid: uuid, spentCoins: 0 )
-                                        let groceryItemRef = self.ref.child(firstNameTextField.text!.lowercased())
-                                        groceryItemRef.setValue(groceryItem.toAnyObject())
+                                        let yesNoAlert = UIAlertController(title: "RecyQ tassen", message: "Selecteer of de nieuwe gebruiker tassen meekrijgt", preferredStyle: .alert)
+                                        
+                                        let yesAction = UIAlertAction(title: "Ja", style: .default, handler: { (yesAction) in
+                                            self.receivedBags = true
+                                            
+                                            let groceryItem = GroceryItem(dateCreated: self.dateFormatter.string(from: Date()) , name: firstNameTextField.text!.lowercased(), lastName: lastNameTextField.text!, address: addressTextField.text!, zipCode: zipCodeTextField.text!, city: cityTextField.text!, phoneNumber: phoneTextField.text!, addedByUser: emailTextField.text!, nearestWasteLocation: NearestWasteLocation(rawValue: locationTextField.text!)!.rawValue, registeredVia: locationTextField.text, didReceiveRecyQBags: self.receivedBags, completed: false, amountOfPlastic: 0, amountOfPaper: 0, amountOfTextile: 0, amountOfEWaste: 0, amountOfBioWaste: 0, wasteDepositInfo: nil, uid: uuid, spentCoins: 0 )
+                                            let groceryItemRef = self.ref.child(firstNameTextField.text!.lowercased())
+                                            groceryItemRef.setValue(groceryItem.toAnyObject())
+                                            self.showAlertWith(title: "Bedankt!", message: "De nieuwe gebruiker: \(groceryItem.name.capitalized) \(groceryItem.lastName!) is toegevoegd")
+                                        })
+                                        
+                                        let noAction = UIAlertAction(title: "Nee", style: .destructive, handler: { (noAction) in
+                                            self.receivedBags = false
+                                            
+                                            let groceryItem = GroceryItem(dateCreated: self.dateFormatter.string(from: Date()) , name: firstNameTextField.text!.lowercased(), lastName: lastNameTextField.text!, address: addressTextField.text!, zipCode: zipCodeTextField.text!, city: cityTextField.text!, phoneNumber: phoneTextField.text!, addedByUser: emailTextField.text!, nearestWasteLocation: NearestWasteLocation(rawValue: locationTextField.text!)!.rawValue, registeredVia: locationTextField.text, didReceiveRecyQBags: self.receivedBags, completed: false, amountOfPlastic: 0, amountOfPaper: 0, amountOfTextile: 0, amountOfEWaste: 0, amountOfBioWaste: 0, wasteDepositInfo: nil, uid: uuid, spentCoins: 0 )
+                                            let groceryItemRef = self.ref.child(firstNameTextField.text!.lowercased())
+                                            groceryItemRef.setValue(groceryItem.toAnyObject())
+                                            self.showAlertWith(title: "Bedankt!", message: "De nieuwe gebruiker: \(groceryItem.name.capitalized) \(groceryItem.lastName!) is toegevoegd")
+                                        })
+                                        
+                                        yesNoAlert.addAction(yesAction)
+                                        yesNoAlert.addAction(noAction)
+                                        self.present(yesNoAlert, animated: true, completion: nil)
         }
         
         let cancelAction = UIAlertAction(title: "Annuleer",
@@ -323,5 +355,27 @@ extension GroceryListTableViewController: UIPickerViewDelegate {
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         self.alert.textFields?[7].text = wasteLocations[row].rawValue
+        self.view.endEditing(true)
+    }
+}
+
+extension GroceryListTableViewController: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField == self.alert.textFields?[8] {
+            let yesNoAlert = UIAlertController(title: "RecyQ tassen", message: "Selecteer of de nieuwe gebruiker tassen meekrijgt", preferredStyle: .alert)
+            let yesAction = UIAlertAction(title: "Ja", style: .default, handler: { (yesAction) in
+                textField.text = "Ja"
+            })
+            
+            let noAction = UIAlertAction(title: "Nee", style: .destructive, handler: { (noAction) in
+                textField.text = "Nee"
+            })
+            
+            alert.addAction(yesAction)
+            alert.addAction(noAction)
+            
+            present(yesNoAlert, animated: true, completion: nil)
+            print("DETECTED TEXTFIELD")
+        }
     }
 }

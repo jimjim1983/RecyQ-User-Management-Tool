@@ -8,12 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		1CFA82AF6B3561F2FB9E51EA /* Pods_RecyQ_User_Management_Tool.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6429AD0569AFC8A101B3D46 /* Pods_RecyQ_User_Management_Tool.framework */; };
+		2B1FAA8C1EAF7B3500946468 /* PTMono.ttc in Resources */ = {isa = PBXBuildFile; fileRef = 2B1FAA8A1EAF7B3500946468 /* PTMono.ttc */; };
+		2B1FAA8D1EAF7B3500946468 /* VolvoBroad.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2B1FAA8B1EAF7B3500946468 /* VolvoBroad.ttf */; };
 		2B46759F1E9F5A6F00240DB2 /* PickerViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B46759E1E9F5A6F00240DB2 /* PickerViewDataSource.swift */; };
 		2B4C17B41E5B108000F34CC2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2B4C17B31E5B108000F34CC2 /* GoogleService-Info.plist */; };
+		2B66EA231F20BA6E006914BD /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2B66EA1E1F20B943006914BD /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2B6DE5C91E9F708500784487 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6DE5C81E9F708500784487 /* Extensions.swift */; };
 		2B6DE5CD1E9F754900784487 /* Admin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6DE5CC1E9F754900784487 /* Admin.swift */; };
-		2B9060EE1E62E9070007BEB4 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B9060E91E62E8E90007BEB4 /* Charts.framework */; };
-		2B9060EF1E62E9070007BEB4 /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2B9060E91E62E8E90007BEB4 /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2B9060F41E62E92E0007BEB4 /* ChartsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B9060F31E62E92E0007BEB4 /* ChartsViewController.swift */; };
 		2B9060F81E62EB5C0007BEB4 /* KeychainItemWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B9060F71E62EB5C0007BEB4 /* KeychainItemWrapper.swift */; };
 		A64634E61CF8753A0019BFCC /* GroceryDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CC1B8E1CBBC37100B6BE69 /* GroceryDetailsViewController.swift */; };
@@ -33,33 +34,26 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		2B9060E81E62E8E90007BEB4 /* PBXContainerItemProxy */ = {
+		2B66EA1D1F20B943006914BD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 2B9060E21E62E8E80007BEB4 /* Charts.xcodeproj */;
+			containerPortal = 2B66EA171F20B942006914BD /* Charts.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 06165F241D8110E600722320;
 			remoteInfo = Charts;
 		};
-		2B9060EA1E62E8E90007BEB4 /* PBXContainerItemProxy */ = {
+		2B66EA1F1F20B943006914BD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 2B9060E21E62E8E80007BEB4 /* Charts.xcodeproj */;
+			containerPortal = 2B66EA171F20B942006914BD /* Charts.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 06B120D51D811E6200D14B02;
 			remoteInfo = ChartsRealm;
 		};
-		2B9060EC1E62E8E90007BEB4 /* PBXContainerItemProxy */ = {
+		2B66EA211F20B943006914BD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 2B9060E21E62E8E80007BEB4 /* Charts.xcodeproj */;
+			containerPortal = 2B66EA171F20B942006914BD /* Charts.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 06165F2E1D8110E600722320;
 			remoteInfo = ChartsTests;
-		};
-		2B9060F01E62E9070007BEB4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2B9060E21E62E8E80007BEB4 /* Charts.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 06165F231D8110E600722320;
-			remoteInfo = Charts;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -70,7 +64,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				2B9060EF1E62E9070007BEB4 /* Charts.framework in Embed Frameworks */,
+				2B66EA231F20BA6E006914BD /* Charts.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -78,11 +72,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2B1FAA8A1EAF7B3500946468 /* PTMono.ttc */ = {isa = PBXFileReference; lastKnownFileType = file; path = PTMono.ttc; sourceTree = "<group>"; };
+		2B1FAA8B1EAF7B3500946468 /* VolvoBroad.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = VolvoBroad.ttf; sourceTree = "<group>"; };
 		2B46759E1E9F5A6F00240DB2 /* PickerViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerViewDataSource.swift; sourceTree = "<group>"; };
 		2B4C17B31E5B108000F34CC2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		2B66EA171F20B942006914BD /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Charts.xcodeproj; path = "../../../../Downloads/Charts-master/Charts.xcodeproj"; sourceTree = "<group>"; };
 		2B6DE5C81E9F708500784487 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		2B6DE5CC1E9F754900784487 /* Admin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Admin.swift; sourceTree = "<group>"; };
-		2B9060E21E62E8E80007BEB4 /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Charts.xcodeproj; path = "../../../Downloads/Charts-master/Charts.xcodeproj"; sourceTree = "<group>"; };
 		2B9060F31E62E92E0007BEB4 /* ChartsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartsViewController.swift; sourceTree = "<group>"; };
 		2B9060F71E62EB5C0007BEB4 /* KeychainItemWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainItemWrapper.swift; sourceTree = "<group>"; };
 		2B9060F91E62EB7E0007BEB4 /* RecyQ User Management Tool.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "RecyQ User Management Tool.entitlements"; sourceTree = "<group>"; };
@@ -114,19 +110,28 @@
 			buildActionMask = 2147483647;
 			files = (
 				1CFA82AF6B3561F2FB9E51EA /* Pods_RecyQ_User_Management_Tool.framework in Frameworks */,
-				2B9060EE1E62E9070007BEB4 /* Charts.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2B9060E31E62E8E80007BEB4 /* Products */ = {
+		2B1FAA8E1EAF7B9B00946468 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				2B9060E91E62E8E90007BEB4 /* Charts.framework */,
-				2B9060EB1E62E8E90007BEB4 /* ChartsRealm.framework */,
-				2B9060ED1E62E8E90007BEB4 /* ChartsTests.xctest */,
+				BB2385681B3DD5AB0079CD01 /* Images.xcassets */,
+				2B1FAA8A1EAF7B3500946468 /* PTMono.ttc */,
+				2B1FAA8B1EAF7B3500946468 /* VolvoBroad.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		2B66EA181F20B942006914BD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2B66EA1E1F20B943006914BD /* Charts.framework */,
+				2B66EA201F20B943006914BD /* ChartsRealm.framework */,
+				2B66EA221F20B943006914BD /* ChartsTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -135,7 +140,7 @@
 			isa = PBXGroup;
 			children = (
 				2B9060F91E62EB7E0007BEB4 /* RecyQ User Management Tool.entitlements */,
-				2B9060E21E62E8E80007BEB4 /* Charts.xcodeproj */,
+				2B66EA171F20B942006914BD /* Charts.xcodeproj */,
 				BB23855E1B3DD5AB0079CD01 /* Grocr */,
 				BB23855D1B3DD5AB0079CD01 /* Products */,
 				DCC88EBC367D376623B278E3 /* Pods */,
@@ -157,7 +162,7 @@
 				BB2385881B3DD9550079CD01 /* Models */,
 				BB2385811B3DD8310079CD01 /* Controllers */,
 				BB2385821B3DD8490079CD01 /* Layouts */,
-				BB2385681B3DD5AB0079CD01 /* Images.xcassets */,
+				2B1FAA8E1EAF7B9B00946468 /* Resources */,
 				BB7DA5121B42CA790018B530 /* Other */,
 				BB23855F1B3DD5AB0079CD01 /* Supporting Files */,
 			);
@@ -256,7 +261,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				2B9060F11E62E9070007BEB4 /* PBXTargetDependency */,
 			);
 			name = "RecyQ User Management Tool";
 			productName = Grocr;
@@ -302,8 +306,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 2B9060E31E62E8E80007BEB4 /* Products */;
-					ProjectRef = 2B9060E21E62E8E80007BEB4 /* Charts.xcodeproj */;
+					ProductGroup = 2B66EA181F20B942006914BD /* Products */;
+					ProjectRef = 2B66EA171F20B942006914BD /* Charts.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -314,25 +318,25 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		2B9060E91E62E8E90007BEB4 /* Charts.framework */ = {
+		2B66EA1E1F20B943006914BD /* Charts.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = Charts.framework;
-			remoteRef = 2B9060E81E62E8E90007BEB4 /* PBXContainerItemProxy */;
+			remoteRef = 2B66EA1D1F20B943006914BD /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		2B9060EB1E62E8E90007BEB4 /* ChartsRealm.framework */ = {
+		2B66EA201F20B943006914BD /* ChartsRealm.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = ChartsRealm.framework;
-			remoteRef = 2B9060EA1E62E8E90007BEB4 /* PBXContainerItemProxy */;
+			remoteRef = 2B66EA1F1F20B943006914BD /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		2B9060ED1E62E8E90007BEB4 /* ChartsTests.xctest */ = {
+		2B66EA221F20B943006914BD /* ChartsTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = ChartsTests.xctest;
-			remoteRef = 2B9060EC1E62E8E90007BEB4 /* PBXContainerItemProxy */;
+			remoteRef = 2B66EA211F20B943006914BD /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -342,7 +346,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2B1FAA8D1EAF7B3500946468 /* VolvoBroad.ttf in Resources */,
 				A695FB8C1CCE1B690043B6AC /* CouponsTableViewCell.xib in Resources */,
+				2B1FAA8C1EAF7B3500946468 /* PTMono.ttc in Resources */,
 				BB2385671B3DD5AB0079CD01 /* Main.storyboard in Resources */,
 				BB23856C1B3DD5AB0079CD01 /* LaunchScreen.xib in Resources */,
 				A6CC1B911CBBC37100B6BE69 /* GroceryDetailsViewController.xib in Resources */,
@@ -437,14 +443,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		2B9060F11E62E9070007BEB4 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = Charts;
-			targetProxy = 2B9060F01E62E9070007BEB4 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		BB2385651B3DD5AB0079CD01 /* Main.storyboard */ = {
@@ -566,7 +564,7 @@
 				DEVELOPMENT_TEAM = HZWL927386;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Grocr/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = nl.theappacademy.recyqusertool;
 				PRODUCT_NAME = "RecyQ User Management Tool";
@@ -592,7 +590,7 @@
 				DEVELOPMENT_TEAM = HZWL927386;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Grocr/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = nl.theappacademy.recyqusertool;
 				PRODUCT_NAME = "RecyQ User Management Tool";

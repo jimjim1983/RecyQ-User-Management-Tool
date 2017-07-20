@@ -32,6 +32,7 @@ enum NearestWasteLocation: String {
 struct GroceryItem {
     
     let key: String
+    var dateCreated: String?
     let name: String
     let lastName: String?
     let address: String?
@@ -40,6 +41,8 @@ struct GroceryItem {
     let phoneNumber: String?
     let addedByUser: String //email
     let nearestWasteLocation: String?
+    let registeredVia: String?
+    let didReceiveRecyQBags: Bool?
     let ref: FIRDatabaseReference?
     var completed: Bool
     var amountOfPlastic: Double
@@ -52,8 +55,9 @@ struct GroceryItem {
     let spentCoins: Int?
     
     // Initialize from arbitrary data
-    init(name: String, lastName: String, address: String, zipCode: String, city: String, phoneNumber: String, addedByUser: String, nearestWasteLocation: String, completed: Bool, key: String = "",  amountOfPlastic: Double, amountOfPaper: Double, amountOfTextile: Double, amountOfEWaste: Double, amountOfBioWaste: Double, wasteDepositInfo: [String: Any]?, uid: String, spentCoins: Int) {
+    init(dateCreated: String?, name: String, lastName: String, address: String, zipCode: String, city: String, phoneNumber: String, addedByUser: String, nearestWasteLocation: String, registeredVia: String?, didReceiveRecyQBags: Bool?, completed: Bool, key: String = "",  amountOfPlastic: Double, amountOfPaper: Double, amountOfTextile: Double, amountOfEWaste: Double, amountOfBioWaste: Double, wasteDepositInfo: [String: Any]?, uid: String, spentCoins: Int) {
         self.key = key
+        self.dateCreated = dateCreated
         self.name = name
         self.lastName = lastName
         self.address = address
@@ -62,6 +66,8 @@ struct GroceryItem {
         self.phoneNumber = phoneNumber
         self.addedByUser = addedByUser
         self.nearestWasteLocation = nearestWasteLocation
+        self.registeredVia = registeredVia
+        self.didReceiveRecyQBags = didReceiveRecyQBags
         self.completed = completed
         self.ref = nil
         self.amountOfPlastic = amountOfPlastic
@@ -78,6 +84,7 @@ struct GroceryItem {
     init(snapshot: FIRDataSnapshot) {
         key = snapshot.key
         let snapshotValue = snapshot.value as? NSDictionary
+        dateCreated = snapshotValue?["dateCreated"] as? String
         name = snapshotValue?["name"] as! String
         lastName = snapshotValue?["lastName"] as? String
         address = snapshotValue?["address"] as? String
@@ -86,6 +93,8 @@ struct GroceryItem {
         phoneNumber = snapshotValue?["phoneNumber"] as? String
         addedByUser = snapshotValue?["addedByUser"] as! String
         nearestWasteLocation = snapshotValue?["nearestWasteLocation"] as? String
+        registeredVia = snapshotValue?["registeredVia"] as? String
+        didReceiveRecyQBags = snapshotValue?["didReceiveRecyQBags"] as? Bool
         completed = snapshotValue?["completed"] as! Bool
         ref = snapshot.ref
         amountOfPlastic = snapshotValue?["amountOfPlastic"] as! Double
@@ -100,6 +109,7 @@ struct GroceryItem {
     
     func toAnyObject() -> [String: AnyObject] {
         return [
+            "dateCreated": dateCreated as AnyObject,
             "name": name as AnyObject,
             "lastName": lastName as AnyObject,
             "address": address as AnyObject,
@@ -108,6 +118,8 @@ struct GroceryItem {
             "phoneNumber": phoneNumber as AnyObject,
             "addedByUser": addedByUser as AnyObject,
             "nearestWasteLocation": nearestWasteLocation as AnyObject,
+            "registeredVia": registeredVia as AnyObject,
+            "didReceiveRecyQBags": didReceiveRecyQBags as AnyObject,
             "completed": completed as AnyObject,
             "amountOfPlastic": amountOfPlastic as AnyObject,
             "amountOfPaper": amountOfPaper as AnyObject,

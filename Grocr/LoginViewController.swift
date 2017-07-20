@@ -10,7 +10,13 @@ import UIKit
 
 class LoginViewController: UIViewController {
     
-    // MARK: Constants
+    // MARK: Outlets
+    @IBOutlet weak var textFieldLoginEmail: UITextField!
+    @IBOutlet weak var textFieldLoginPassword: UITextField!
+    @IBOutlet var logInButton: UIButton!
+    @IBOutlet var signInButton: UIButton!
+    
+    // MARK: Properties
     let logInToList = "LoginToList"
     let ref = FIRDatabase.database().reference()
     let adminRef = FIRDatabase.database().reference(withPath: "admins")
@@ -22,15 +28,13 @@ class LoginViewController: UIViewController {
     let locationsPickerView = UIPickerView()
     var alert = UIAlertController()
     
-    // MARK: Outlets
-    @IBOutlet weak var textFieldLoginEmail: UITextField!
-    @IBOutlet weak var textFieldLoginPassword: UITextField!
-    
-    // MARK: Properties
-    
     // MARK: UIViewController Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.textFieldLoginEmail.addBorderWith(width: 1, color: .lightGray)
+        self.textFieldLoginPassword.addBorderWith(width: 1, color: .lightGray)
+        self.logInButton.addBorderWith(width: 1, color: .darkGray)
         
         NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.keyboardWillShow(_:)), name:NSNotification.Name.UIKeyboardWillShow, object: self.view.window)
         NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: self.view.window)
@@ -58,15 +62,19 @@ class LoginViewController: UIViewController {
     }
     
     // MARK: Actions
+    @IBAction func viewTapAction(_ sender: Any) {
+        view.endEditing(true)
+    }
+    
     @IBAction func loginDidTouch(_ sender: AnyObject) {
         
         //self.keychainItemWrapper["email"] = textFieldLoginEmail.text as AnyObject?
         //self.keychainItemWrapper["password"] = textFieldLoginPassword.text as AnyObject?
         let goToListAction = UIAlertAction(title: "Verder", style: .default) { (goToListAction) in
+            self.view.endEditing(true)
             self.performSegue(withIdentifier: self.logInToList, sender: nil)
         }
-        if let email = textFieldLoginEmail.text, let password = textFieldLoginPassword.text {
-            
+        if let email = textFieldLoginEmail.text, let password = textFieldLoginPassword.text {            
             FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user, error) in
                 if error != nil {
                     print("Error loggin user in: \(error?.localizedDescription)")

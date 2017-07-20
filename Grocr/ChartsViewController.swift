@@ -11,6 +11,14 @@ import Charts
 
 class ChartsViewController: UIViewController, ChartViewDelegate, IAxisValueFormatter {
 
+    @IBOutlet var dateCreatedLabel: UILabel!
+    @IBOutlet var addressLabel: UILabel!
+    @IBOutlet var zipCodeAndCityLabel: UILabel!
+    @IBOutlet var emailLabel: UILabel!
+    @IBOutlet var phoneLabel: UILabel!
+    @IBOutlet var registeredVia: UILabel!
+    @IBOutlet var didReceiveRecyQBags: UILabel!
+    
     @IBOutlet var barChartView: BarChartView!
     
     var admin: Admin!
@@ -32,6 +40,28 @@ class ChartsViewController: UIViewController, ChartViewDelegate, IAxisValueForma
         else {
             self.title = groceryItem.name.capitalized
         }
+        
+        if let dateCreated = groceryItem.dateCreated {
+            self.dateCreatedLabel.text = dateCreated
+        }
+        
+        if let address = groceryItem.address, let zipCode = groceryItem.zipCode, let city = groceryItem.city, let phone = groceryItem.phoneNumber, let registeredVia = groceryItem.registeredVia {
+            self.addressLabel.text = address
+            self.zipCodeAndCityLabel.text = zipCode + " " + city
+            self.phoneLabel.text = "Tel: \(phone)"
+            self.emailLabel.text = groceryItem.addedByUser
+            self.registeredVia.text = registeredVia
+        }
+        
+        if let didReceiveRecyQBags = groceryItem.didReceiveRecyQBags {
+            if didReceiveRecyQBags {
+                self.didReceiveRecyQBags.text = "Ja"
+            }
+            else {
+                self.didReceiveRecyQBags.text = "Nee"
+            }
+        }
+        
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(showGroceryDetailVC))
         self.navigationController?.navigationBar.backItem?.title = "Anything Else"
         
@@ -50,8 +80,9 @@ class ChartsViewController: UIViewController, ChartViewDelegate, IAxisValueForma
     }
     
     func setChart(dataPoints: [String], values: [Double]) {
-        barChartView.noDataText = "There is no data for the chart available."
-        
+        self.barChartView.noDataText = "There is no data for the chart available."
+        self.barChartView.chartDescription?.text = ""
+
         var dataEntries: [BarChartDataEntry] = []
         
         for i in 0..<dataPoints.count {
@@ -62,7 +93,7 @@ class ChartsViewController: UIViewController, ChartViewDelegate, IAxisValueForma
             print(dataEntries.count)
         }
         
-        let chartDataSet = BarChartDataSet(values: dataEntries, label: "Amounts")
+        let chartDataSet = BarChartDataSet(values: dataEntries, label: "Hoeveelheden in KG")
         let chartData = BarChartData(dataSet: chartDataSet)
         barChartView.data = chartData
         
@@ -72,6 +103,8 @@ class ChartsViewController: UIViewController, ChartViewDelegate, IAxisValueForma
         barChartView.xAxis.labelPosition = .bottom
         barChartView.rightAxis.enabled = false
         barChartView.xAxis.drawGridLinesEnabled = false
+        barChartView.xAxis.granularityEnabled = true
+        barChartView.xAxis.granularity = 1
         barChartView.leftAxis.axisMinimum = 0.0
         //        barChartView.backgroundColor = UIColor(red: 189/255, green: 195/255, blue: 199/255, alpha: 1)
         barChartView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0, easingOption: .easeInBounce)

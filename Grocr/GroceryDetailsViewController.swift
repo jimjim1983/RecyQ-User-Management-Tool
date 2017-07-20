@@ -50,7 +50,6 @@ class GroceryDetailsViewController: UIViewController, UITableViewDelegate, UITab
         return dateFormatter
     }()
     
-    
     override func viewWillAppear(_ animated: Bool) {
         
         // go trough all coupons and find the one with the same user uid, then add them to the array for the tableview
