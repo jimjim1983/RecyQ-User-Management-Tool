@@ -33,6 +33,7 @@ class GroceryDetailsViewController: UIViewController, UITableViewDelegate, UITab
     @IBOutlet var ironLabel: UILabel!
     @IBOutlet var eWasteLabel: UILabel!
     @IBOutlet var bioWasteLabel: UILabel!
+    @IBOutlet var glassWasteLabel: UILabel!
     
     @IBOutlet var plasticTextField: UITextField!
     @IBOutlet var paperTextField: UITextField!
@@ -40,6 +41,7 @@ class GroceryDetailsViewController: UIViewController, UITableViewDelegate, UITab
     @IBOutlet var ironTextField: UITextField!
     @IBOutlet var eWasteTextField: UITextField!
     @IBOutlet var bioWasteTextField: UITextField!
+    @IBOutlet var glassWasteTextField: UITextField!
     
     @IBOutlet var tableView: UITableView!
     
@@ -72,10 +74,7 @@ class GroceryDetailsViewController: UIViewController, UITableViewDelegate, UITab
         else {
             emailLabel.text = groceryItem.name.capitalized
         }
-        
-        //        if let emailLabelText = groceryItem.name {
-        //            emailLabel.text = "\(emailLabelText)"
-        //        }
+  
         let amountOfPlastic = groceryItem.amountOfPlastic
         plasticLabel.text = "\(amountOfPlastic)"
         
@@ -91,8 +90,11 @@ class GroceryDetailsViewController: UIViewController, UITableViewDelegate, UITab
         let amountOfBioWaste = groceryItem.amountOfBioWaste
         bioWasteLabel.text = "\(amountOfBioWaste)"
         
+        let amountOfGlass = groceryItem.amountOfGlass ?? 0
+        glassWasteLabel.text = "\(amountOfGlass)"
+        
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Annuleer", style: UIBarButtonItemStyle.plain, target: self, action: #selector(GroceryDetailsViewController.cancel))
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Opslaan", style: UIBarButtonItemStyle.plain, target: self, action: #selector(GroceryDetailsViewController.save))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Opslaan", style: UIBarButtonItemStyle.plain, target: self, action: #selector(GroceryDetailsViewController.showWasteDepositTypeAlert))
         
         let nib = UINib.init(nibName: "CouponsTableViewCell", bundle: nil)
         self.tableView.register(nib, forCellReuseIdentifier: "cell")
@@ -103,7 +105,7 @@ class GroceryDetailsViewController: UIViewController, UITableViewDelegate, UITab
         _ = self.navigationController?.popViewController(animated: true)
     }
     
-    func save() {
+    func saveNewWasteDeposit(isBrought: Bool) {
         
         let name = groceryItem.name.lowercased()
         ref = FIRDatabase.database().reference(withPath: "clients").child(name)
@@ -128,6 +130,14 @@ class GroceryDetailsViewController: UIViewController, UITableViewDelegate, UITab
         ref.child( "amountOfBioWaste").setValue(amountOfBioWaste)
         self.groceryItem.amountOfBioWaste = amountOfBioWaste
         
+        var amountOfGlass: Double = 0
+        if let currentAmountOfGlass = groceryItem.amountOfGlass {
+            amountOfGlass = currentAmountOfGlass
+        }
+        let totalAmountOfGlass = amountOfGlass + ((glassWasteTextField.text)! as NSString).doubleValue
+        ref.child("amountOfGlass").setValue(totalAmountOfGlass)
+        self.groceryItem.amountOfGlass = totalAmountOfGlass
+        
         let adminName = self.admin.firstName + " " + self.admin.lastName
         let wasteDepositInfo: [String: Any] = [
             "Admin": adminName,
@@ -137,7 +147,9 @@ class GroceryDetailsViewController: UIViewController, UITableViewDelegate, UITab
             "Papier": ((paperTextField.text)! as NSString).doubleValue,
             "Textiel": ((textileTextField.text)! as NSString).doubleValue,
             "E-Waste": ((eWasteTextField.text)! as NSString).doubleValue,
-            "Bio": ((bioWasteTextField.text)! as NSString).doubleValue]
+            "Bio": ((bioWasteTextField.text)! as NSString).doubleValue,
+            "Glas": ((glassWasteTextField.text)! as NSString).doubleValue,
+            "Gebracht": isBrought]
         
         ref.child("wasteDepositInfo").childByAutoId().setValue(wasteDepositInfo)
         
@@ -145,6 +157,19 @@ class GroceryDetailsViewController: UIViewController, UITableViewDelegate, UITab
             delegate.didFinishAddingWasteItems(sender: self)
             _ = self.navigationController?.popViewController(animated: true)
         }
+    }
+    
+    func showWasteDepositTypeAlert() {
+        let depositAlert = UIAlertController(title: "Maak een selectie.", message: "Is het afval gebracht of opgehaald?", preferredStyle: .alert)
+        let gebrachtAction = UIAlertAction(title: "Gebracht", style: .default) { (gebrachtAction) in
+            self.saveNewWasteDeposit(isBrought: true)
+        }
+        let opgehaaldAction = UIAlertAction(title: "Opgehaald", style: .default) { (opgehaalddAction) in
+            self.saveNewWasteDeposit(isBrought: false)
+        }
+        depositAlert.addAction(gebrachtAction)
+        depositAlert.addAction(opgehaaldAction)
+        present(depositAlert, animated: true, completion: nil)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

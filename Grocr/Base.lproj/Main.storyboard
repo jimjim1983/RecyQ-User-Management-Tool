@@ -7,6 +7,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -80,13 +81,13 @@
                                 </subviews>
                             </stackView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="recyq_logo_l_RGB" translatesAutoresizingMaskIntoConstraints="NO" id="XyH-zA-fwG">
-                                <rect key="frame" x="166.5" y="378.5" width="436" height="145.5"/>
+                                <rect key="frame" x="166" y="377" width="436" height="145.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="XyH-zA-fwG" secondAttribute="height" multiplier="3:1" id="Go8-Nv-AMA"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User management tool" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="16" translatesAutoresizingMaskIntoConstraints="NO" id="Pa7-Vn-WOH">
-                                <rect key="frame" x="20" y="524" width="728" height="36"/>
+                                <rect key="frame" x="20" y="522.5" width="728" height="37.5"/>
                                 <fontDescription key="fontDescription" name="PTMono-Regular" family="PT Mono" pointSize="32"/>
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
@@ -162,6 +163,155 @@
             </objects>
             <point key="canvasLocation" x="2492" y="475"/>
         </scene>
+        <!--Management View Controller-->
+        <scene sceneID="u0u-8l-L6x">
+            <objects>
+                <viewController id="PWQ-PJ-SGI" customClass="ManagementViewController" customModule="RecyQ_User_Management_Tool" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="siv-O0-khH"/>
+                        <viewControllerLayoutGuide type="bottom" id="uHC-Fb-63U"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="bje-VI-KXu">
+                        <rect key="frame" x="0.0" y="64" width="768" height="960"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="gCl-Yi-f0I">
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="960"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="Cell" id="mxA-JX-Cad">
+                                        <rect key="frame" x="0.0" y="28" width="768" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="mxA-JX-Cad" id="BZ9-LX-EkA">
+                                            <rect key="frame" x="0.0" y="0.0" width="702" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="uHC-Fb-63U" firstAttribute="top" secondItem="gCl-Yi-f0I" secondAttribute="bottom" id="OtB-z1-0OF"/>
+                            <constraint firstItem="gCl-Yi-f0I" firstAttribute="leading" secondItem="bje-VI-KXu" secondAttribute="leading" id="bkQ-Cf-3X3"/>
+                            <constraint firstAttribute="trailing" secondItem="gCl-Yi-f0I" secondAttribute="trailing" id="bo2-mL-Z4W"/>
+                            <constraint firstItem="gCl-Yi-f0I" firstAttribute="top" secondItem="siv-O0-khH" secondAttribute="bottom" id="vQY-aG-HEK"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="tableView" destination="gCl-Yi-f0I" id="aOa-d9-1Xj"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="diA-QN-s8T" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1672" y="-223"/>
+        </scene>
+        <!--Winkel toevoegen-->
+        <scene sceneID="Uf3-9O-8tF">
+            <objects>
+                <viewController storyboardIdentifier="addShopVC" id="7hM-hC-c6A" customClass="AddShopViewController" customModule="RecyQ_User_Management_Tool" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="O48-al-X04"/>
+                        <viewControllerLayoutGuide type="bottom" id="xqi-vB-4NB"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="SJN-LQ-CHW">
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Winkel naam:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YkP-YL-zC8">
+                                <rect key="frame" x="20" y="54" width="286" height="45"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="PTMono-Regular" family="PT Mono" pointSize="31"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Product naam:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hxa-8D-6Dh">
+                                <rect key="frame" x="20" y="130" width="313" height="45"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="PTMono-Regular" family="PT Mono" pointSize="31"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="6Lc-Tf-WRE">
+                                <rect key="frame" x="351" y="54" width="397" height="45"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" name="PTMono-Regular" family="PT Mono" pointSize="31"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="1wc-sG-YA5">
+                                <rect key="frame" x="351" y="130" width="397" height="45"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" name="PTMono-Regular" family="PT Mono" pointSize="31"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textField>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="88f-CY-eH8">
+                                <rect key="frame" x="20" y="367" width="728" height="110"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" name="PTMono-Regular" family="PT Mono" pointSize="31"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Prijs in tokens:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KzR-kd-gra">
+                                <rect key="frame" x="20" y="206" width="313" height="45"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="PTMono-Regular" family="PT Mono" pointSize="31"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="wPu-Nl-afJ">
+                                <rect key="frame" x="351" y="206" width="67" height="45"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" name="PTMono-Regular" family="PT Mono" pointSize="31"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Product omschrijving:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8ux-yO-gYO">
+                                <rect key="frame" x="19" y="288" width="408" height="45"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="PTMono-Regular" family="PT Mono" pointSize="31"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Camera-Icon" translatesAutoresizingMaskIntoConstraints="NO" id="ljq-be-ER0">
+                                <rect key="frame" x="122" y="523" width="524" height="313"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="keM-tU-iDe" appends="YES" id="Bav-at-3Jh"/>
+                                </connections>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Winkel toevoegen" id="AMa-aP-sv1">
+                        <barButtonItem key="rightBarButtonItem" title="Opslaan" id="Z2e-e9-YrW">
+                            <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <action selector="saveButtonTapped:" destination="7hM-hC-c6A" id="zef-pG-F0r"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="detailDescriptionTextView" destination="88f-CY-eH8" id="aTj-gZ-CUq"/>
+                        <outlet property="itemDescriptionTextField" destination="1wc-sG-YA5" id="6Co-0b-iJO"/>
+                        <outlet property="itemImageView" destination="ljq-be-ER0" id="Y5p-Sa-nbn"/>
+                        <outlet property="saveButton" destination="Z2e-e9-YrW" id="rLV-Tu-1eG"/>
+                        <outlet property="shopNameTextField" destination="6Lc-Tf-WRE" id="wh7-ZW-tbR"/>
+                        <outlet property="tokenAmountTextField" destination="wPu-Nl-afJ" id="6Nv-po-0HS"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="V3D-9L-V5u" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="keM-tU-iDe">
+                    <connections>
+                        <action selector="tapAction:" destination="7hM-hC-c6A" id="S5p-Wb-GyZ"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="2401.5625" y="-223.24218749999997"/>
+        </scene>
         <!--Recyq User Management Tool-->
         <scene sceneID="GDd-Ja-sb5">
             <objects>
@@ -170,9 +320,15 @@
                         <rect key="frame" x="0.0" y="64" width="768" height="960"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <searchBar key="tableHeaderView" contentMode="redraw" placeholder="Zoek naar gebruikers" id="JQo-aE-wPQ">
+                            <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <color key="barTintColor" red="0.17647058823529413" green="0.80392156862745101" blue="0.035294117647058823" alpha="1" colorSpace="calibratedRGB"/>
+                            <textInputTraits key="textInputTraits"/>
+                        </searchBar>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ItemCell" textLabel="lFS-Be-nny" detailTextLabel="EUL-DG-a4q" rowHeight="60" style="IBUITableViewCellStyleSubtitle" id="en3-w1-wtA">
-                                <rect key="frame" x="0.0" y="22" width="768" height="60"/>
+                                <rect key="frame" x="0.0" y="66" width="768" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="en3-w1-wtA" id="l9k-nz-0Yb">
                                     <rect key="frame" x="0.0" y="0.0" width="768" height="59"/>
@@ -207,14 +363,25 @@
                                 <action selector="logOutButtonTapped:" destination="WRG-qR-ebT" id="EZN-kn-pLR"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="QGM-U2-dHv">
-                            <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                            <connections>
-                                <action selector="addButtonDidTouch:" destination="WRG-qR-ebT" id="5P0-iy-CPv"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="add" id="QGM-U2-dHv">
+                                <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <action selector="addButtonDidTouch:" destination="WRG-qR-ebT" id="5P0-iy-CPv"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem enabled="NO" systemItem="compose" id="JGc-R8-mZc">
+                                <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <action selector="composeButtonTapped:" destination="WRG-qR-ebT" id="aVM-qG-Ogu"/>
+                                    <segue destination="PWQ-PJ-SGI" kind="show" id="8NR-V6-zbd"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="composeButton" destination="JGc-R8-mZc" id="sY5-hF-Jft"/>
+                        <outlet property="searchBar" destination="JQo-aE-wPQ" id="z4B-bQ-cdc"/>
                         <segue destination="oUo-Uh-r42" kind="show" identifier="ListToUsers" id="NRC-oz-J58"/>
                     </connections>
                 </tableViewController>
@@ -321,8 +488,106 @@
                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="HOt-9U-vAh">
+                                        <rect key="frame" x="437" y="56" width="275" height="332"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="11" translatesAutoresizingMaskIntoConstraints="NO" id="5rl-eu-D9n">
+                                                <rect key="frame" x="0.0" y="0.0" width="275" height="276"/>
+                                                <subviews>
+                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Voornaam" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="YDm-qv-eoW">
+                                                        <rect key="frame" x="0.0" y="0.0" width="275" height="30"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="30" id="Zou-rr-Hjg"/>
+                                                            <constraint firstAttribute="width" constant="275" id="sOO-m5-DfB"/>
+                                                        </constraints>
+                                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <fontDescription key="fontDescription" name="PTMono-Regular" family="PT Mono" pointSize="19"/>
+                                                        <textInputTraits key="textInputTraits"/>
+                                                    </textField>
+                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Achternaam" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="AFM-VW-hsq">
+                                                        <rect key="frame" x="0.0" y="41" width="275" height="30"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="30" id="lFe-Oz-P1h"/>
+                                                            <constraint firstAttribute="width" constant="275" id="y2Z-94-qfb"/>
+                                                        </constraints>
+                                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <fontDescription key="fontDescription" name="PTMono-Regular" family="PT Mono" pointSize="19"/>
+                                                        <textInputTraits key="textInputTraits"/>
+                                                    </textField>
+                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Adres + Huisnummer" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="25Y-vy-cGK">
+                                                        <rect key="frame" x="0.0" y="82" width="275" height="30"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="30" id="Ir3-1k-Jpf"/>
+                                                            <constraint firstAttribute="width" constant="275" id="dWZ-Zv-ZUl"/>
+                                                        </constraints>
+                                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <fontDescription key="fontDescription" name="PTMono-Regular" family="PT Mono" pointSize="19"/>
+                                                        <textInputTraits key="textInputTraits"/>
+                                                    </textField>
+                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Postcode" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eqI-GA-4M2">
+                                                        <rect key="frame" x="0.0" y="123" width="275" height="30"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="30" id="Rkh-i5-1uN"/>
+                                                            <constraint firstAttribute="width" constant="275" id="zJe-4D-Jbp"/>
+                                                        </constraints>
+                                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <fontDescription key="fontDescription" name="PTMono-Regular" family="PT Mono" pointSize="19"/>
+                                                        <textInputTraits key="textInputTraits"/>
+                                                    </textField>
+                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Woonplaats" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="spc-tc-enE">
+                                                        <rect key="frame" x="0.0" y="164" width="275" height="30"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="30" id="JlY-Dk-vYf"/>
+                                                            <constraint firstAttribute="width" constant="275" id="Uup-2z-yYJ"/>
+                                                        </constraints>
+                                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <fontDescription key="fontDescription" name="PTMono-Regular" family="PT Mono" pointSize="19"/>
+                                                        <textInputTraits key="textInputTraits"/>
+                                                    </textField>
+                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Telefoon nummer" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="4Rp-oV-J4h">
+                                                        <rect key="frame" x="0.0" y="205" width="275" height="30"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="30" id="EVZ-MU-Su6"/>
+                                                            <constraint firstAttribute="width" constant="275" id="aXz-8U-VdS"/>
+                                                        </constraints>
+                                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <fontDescription key="fontDescription" name="PTMono-Regular" family="PT Mono" pointSize="19"/>
+                                                        <textInputTraits key="textInputTraits"/>
+                                                    </textField>
+                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email adres" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="YF1-HK-9CH">
+                                                        <rect key="frame" x="0.0" y="246" width="275" height="30"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="275" id="Dpo-FB-5sH"/>
+                                                            <constraint firstAttribute="height" constant="30" id="uKc-y3-As6"/>
+                                                        </constraints>
+                                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <fontDescription key="fontDescription" name="PTMono-Regular" family="PT Mono" pointSize="19"/>
+                                                        <textInputTraits key="textInputTraits"/>
+                                                    </textField>
+                                                </subviews>
+                                            </stackView>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mNi-fn-Tvw">
+                                                <rect key="frame" x="63" y="296" width="149" height="36"/>
+                                                <color key="backgroundColor" red="0.1764705882" green="0.80784313730000001" blue="0.031372549020000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="149" id="z9u-K1-vN1"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="PTMono-Regular" family="PT Mono" pointSize="20"/>
+                                                <state key="normal" title="Opslaan">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="saveButtonTapped:" destination="8Dv-kf-Buf" eventType="touchUpInside" id="JJQ-1n-7n7"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="HOt-9U-vAh" secondAttribute="trailing" constant="56" id="9AA-gd-fZy"/>
+                                    <constraint firstItem="HOt-9U-vAh" firstAttribute="top" secondItem="GFe-oz-mQh" secondAttribute="top" constant="56" id="fIt-Cx-ZWX"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -339,18 +604,26 @@
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <connections>
                         <outlet property="addressLabel" destination="xiT-VW-FXA" id="9ev-A2-ALJ"/>
+                        <outlet property="addressTextField" destination="25Y-vy-cGK" id="rgQ-SX-56W"/>
                         <outlet property="barChartView" destination="Gbg-a7-LGa" id="LXd-W3-UzD"/>
+                        <outlet property="cityTextField" destination="spc-tc-enE" id="71k-de-34f"/>
                         <outlet property="dateCreatedLabel" destination="vtN-u1-qGN" id="sVh-4m-13T"/>
                         <outlet property="didReceiveRecyQBags" destination="ppN-rL-YrG" id="JRs-NP-V9s"/>
+                        <outlet property="editStackView" destination="HOt-9U-vAh" id="tr5-t6-Yhr"/>
                         <outlet property="emailLabel" destination="NaD-3Y-yhk" id="dac-n0-4m9"/>
+                        <outlet property="emailTextField" destination="YF1-HK-9CH" id="pUT-Gf-kcD"/>
+                        <outlet property="firstNameTextField" destination="YDm-qv-eoW" id="GbI-Yl-wcU"/>
+                        <outlet property="lastNameTextField" destination="AFM-VW-hsq" id="pkZ-3Z-zOE"/>
                         <outlet property="phoneLabel" destination="Z2W-m5-O9H" id="Ubi-Dm-Pz3"/>
+                        <outlet property="phoneTextField" destination="4Rp-oV-J4h" id="mOY-Td-61l"/>
                         <outlet property="registeredVia" destination="HMD-dc-sgn" id="bUo-Wq-64T"/>
                         <outlet property="zipCodeAndCityLabel" destination="hZB-tm-EZ1" id="lCm-Jv-cDJ"/>
+                        <outlet property="zipcodeTextField" destination="eqI-GA-4M2" id="pjq-kP-kHh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VeZ-ad-3av" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1403.90625" y="1348.828125"/>
+            <point key="canvasLocation" x="1064.84375" y="1261.5234375"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="5Ek-Z0-CEa">
@@ -378,6 +651,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="Camera-Icon" width="112" height="112"/>
         <image name="recyq_logo_l_RGB" width="436" height="105"/>
     </resources>
 </document>

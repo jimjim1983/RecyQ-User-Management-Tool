@@ -25,13 +25,17 @@ import FirebaseAuth
 
 class GroceryListTableViewController: UITableViewController {
     
+    @IBOutlet var composeButton: UIBarButtonItem!
+    @IBOutlet var searchBar: UISearchBar!
     // MARK: Constants
     let ListToUsers = "ListToUsers"
     let ref = FIRDatabase.database().reference(withPath: "clients")
     let usersRef = FIRDatabase.database().reference(withPath: "online")
     
     // MARK: Properties
+    var searchActive : Bool = false
     var items = [GroceryItem]()
+    var filteredItems = [GroceryItem]()
     var user: User!
     var userCountBarButtonItem: UIBarButtonItem!
     var admin: Admin!
@@ -53,76 +57,64 @@ class GroceryListTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if self.admin.firstName == "Test" || self.admin.firstName == "Richard" {
+            self.composeButton.isEnabled = true
+        }
         // Set up swipe to delete
         tableView.allowsMultipleSelectionDuringEditing = false
         self.wasteLocations = [.amsterdamsePoort, .hBuurt, .holendrecht, .venserpolder]
         self.dataSource = PickerViewDataSource(wasteLocations: self.wasteLocations)
+        self.searchBar.delegate = self
         self.locationsPickerView.dataSource = self.dataSource
         self.locationsPickerView.delegate = self
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.searchBar.resignFirstResponder()
         
         ref.queryOrdered(byChild: "name").observe(.value, with: { snapshot in
             var newItems = [GroceryItem]()
             for item in (snapshot.children) {
-
-//                let itemTest = item as! FIRDataSnapshot
-//                if itemTest.key  == "henk" {
-//                   itemTest.ref.removeValue()
-//                }
+                
+                //                let itemTest = item as! FIRDataSnapshot
+                //                if itemTest.key  == "fouad" {
+                //                   itemTest.ref.removeValue()
+                //                }
                 let groceryItem = GroceryItem(snapshot: item as! FIRDataSnapshot)
                 newItems.append(groceryItem)
             }
             self.items = newItems
             self.tableView.reloadData()
             
-            //Unauthorize in case of a crash caused by the deletion of the user on the back end
-            //self.ref.unauth()
-            
-        })
-        
-//        FIRAuth.auth()!.addStateDidChangeListener({ (auth, firUser) in
-//            if let firUser = firUser {
-//                self.user = User(user: firUser)
-//                let currentUserRef = self.usersRef.child(self.user.uid)
-//                currentUserRef.setValue(self.user.email)
-//                currentUserRef.onDisconnectRemoveValue()
-//            }
-//        })
-        //        ref.observeAuthEvent { authData in
-        //            if authData != nil {
-        //                self.user = User(authData: authData!)
-        //                let currentUserRef = self.usersRef?.child(byAppendingPath: self.user.uid)
-        //                currentUserRef?.setValue(self.user.email)
-        //                currentUserRef?.onDisconnectRemoveValue()
-        //            }
-        //        }
-        usersRef.observe(.value, with: { (snapshot: FIRDataSnapshot!) in
-            if snapshot.exists() {
-                self.userCountBarButtonItem?.title = snapshot.childrenCount.description
-            }
-            else {
-                self.userCountBarButtonItem?.title = "0"
-            }
         })
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         
+
     }
     
     // MARK: UITableView Delegate methods
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if searchActive {
+            return self.filteredItems.count
+        }
         return items.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ItemCell", for: indexPath)
-        let groceryItem = items[indexPath.row]
+        let groceryItem: GroceryItem!
+        if self.searchActive {
+            groceryItem = self.filteredItems[indexPath.row]
+        }
+        else {
+            groceryItem = self.items[indexPath.row]
+        }
         let wasteTotal = Double(groceryItem.amountOfBioWaste) + Double(groceryItem.amountOfEWaste) +  Double(groceryItem.amountOfPaper) + Double(groceryItem.amountOfPlastic) + Double(groceryItem.amountOfTextile)
         
         if groceryItem.lastName?.capitalized != nil {
@@ -131,7 +123,6 @@ class GroceryListTableViewController: UITableViewController {
         else {
             cell.textLabel?.text = groceryItem.name.capitalized
         }
-        
         cell.detailTextLabel?.textColor = UIColor.darkGray
         
         if wasteTotal >= 1 {
@@ -158,10 +149,6 @@ class GroceryListTableViewController: UITableViewController {
             cell.detailTextLabel?.text = "Super Awesome User"
             
         }
-        
-        // Determine whether the cell is checked
-        // toggleCellCheckbox(cell, isCompleted: groceryItem.completed)
-        
         return cell
     }
     
@@ -179,55 +166,30 @@ class GroceryListTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let chartsVC = self.storyboard?.instantiateViewController(withIdentifier: "chartsVC") as! ChartsViewController
-        let groceryItems = items[indexPath.row]
-        let wasteAmounts: [Double] = [groceryItems.amountOfPlastic, groceryItems.amountOfPaper, groceryItems.amountOfTextile, groceryItems.amountOfBioWaste, groceryItems.amountOfEWaste]
+        let groceryItem: GroceryItem!
+        if self.searchActive {
+            groceryItem = self.filteredItems[indexPath.row]
+        }
+        else {
+            groceryItem = self.items[indexPath.row]
+        }
+        let wasteAmounts: [Double] = [groceryItem.amountOfPlastic, groceryItem.amountOfPaper, groceryItem.amountOfTextile, groceryItem.amountOfGlass ?? 0, groceryItem.amountOfBioWaste, groceryItem.amountOfEWaste]
         chartsVC.admin = self.admin
         chartsVC.amounts = wasteAmounts
-        chartsVC.groceryItem = groceryItems
-        //        groceryDetailVC.groceryItem = groceryItems
-        //        let navigationController = UINavigationController(rootViewController: barChartVC)
-        //        self.present(navigationController, animated: true, completion: nil)
+        chartsVC.groceryItem = groceryItem
         
         self.navigationController?.pushViewController(chartsVC, animated: true)
-        
-        //let cell = tableView.cellForRowAtIndexPath(indexPath)!
-        //        var groceryItem = items[indexPath.row]
-        //        groceryDetailVC.
-        
-        // let toggledCompletion = !groceryItem.completed
-        //toggleCellCheckbox(cell, isCompleted: toggledCompletion)
-        //groceryItem.ref?.updateChildValues(["completed": toggledCompletion])
     }
     
-    func toggleCellCheckbox(_ cell: UITableViewCell, isCompleted: Bool) {
-        if !isCompleted {
-            cell.accessoryType = UITableViewCellAccessoryType.none
-            cell.textLabel?.textColor = UIColor.black
-            cell.detailTextLabel?.textColor = UIColor.black
-        } else {
-            cell.accessoryType = UITableViewCellAccessoryType.checkmark
-            cell.textLabel?.textColor = UIColor.gray
-            cell.detailTextLabel?.textColor = UIColor.gray
-        }
+    // MARK: Compose action.
+
+    @IBAction func composeButtonTapped(_ sender: Any) {
     }
     
     // MARK: Add Item
     
     @IBAction func addButtonDidTouch(_ sender: AnyObject) {
-        // Alert View for input
-        
-        // log out
-        //            ref.unauth()
-        //            let loginVC = LoginViewController()
-        //            self.presentViewController(loginVC, animated: true, completion: nil)
-        
-        
-        //            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        //            appDelegate.window?.rootViewController = loginVC
-        
-        
-        
-        
+
         self.alert = UIAlertController(title: "Voer gebruikersnaam in",
                                       message: "van nieuwe gebruiker",
                                       preferredStyle: .alert)
@@ -257,7 +219,7 @@ class GroceryListTableViewController: UITableViewController {
                                         let yesAction = UIAlertAction(title: "Ja", style: .default, handler: { (yesAction) in
                                             self.receivedBags = true
                                             
-                                            let groceryItem = GroceryItem(dateCreated: self.dateFormatter.string(from: Date()) , name: firstNameTextField.text!.lowercased(), lastName: lastNameTextField.text!, address: addressTextField.text!, zipCode: zipCodeTextField.text!, city: cityTextField.text!, phoneNumber: phoneTextField.text!, addedByUser: emailTextField.text!, nearestWasteLocation: NearestWasteLocation(rawValue: locationTextField.text!)!.rawValue, registeredVia: locationTextField.text, didReceiveRecyQBags: self.receivedBags, completed: false, amountOfPlastic: 0, amountOfPaper: 0, amountOfTextile: 0, amountOfEWaste: 0, amountOfBioWaste: 0, wasteDepositInfo: nil, uid: uuid, spentCoins: 0 )
+                                            let groceryItem = GroceryItem(dateCreated: self.dateFormatter.string(from: Date()) , name: firstNameTextField.text!.lowercased(), lastName: lastNameTextField.text!, address: addressTextField.text!, zipCode: zipCodeTextField.text!, city: cityTextField.text!, phoneNumber: phoneTextField.text!, addedByUser: emailTextField.text!, nearestWasteLocation: NearestWasteLocation(rawValue: locationTextField.text!)!.rawValue, registeredVia: locationTextField.text, didReceiveRecyQBags: self.receivedBags, completed: false, amountOfPlastic: 0, amountOfPaper: 0, amountOfTextile: 0, amountOfEWaste: 0, amountOfBioWaste: 0, amountOfGlass: 0, wasteDepositInfo: nil, uid: uuid, spentCoins: 0 )
                                             let groceryItemRef = self.ref.child(firstNameTextField.text!.lowercased())
                                             groceryItemRef.setValue(groceryItem.toAnyObject())
                                             self.showAlertWith(title: "Bedankt!", message: "De nieuwe gebruiker: \(groceryItem.name.capitalized) \(groceryItem.lastName!) is toegevoegd")
@@ -266,7 +228,7 @@ class GroceryListTableViewController: UITableViewController {
                                         let noAction = UIAlertAction(title: "Nee", style: .destructive, handler: { (noAction) in
                                             self.receivedBags = false
                                             
-                                            let groceryItem = GroceryItem(dateCreated: self.dateFormatter.string(from: Date()) , name: firstNameTextField.text!.lowercased(), lastName: lastNameTextField.text!, address: addressTextField.text!, zipCode: zipCodeTextField.text!, city: cityTextField.text!, phoneNumber: phoneTextField.text!, addedByUser: emailTextField.text!, nearestWasteLocation: NearestWasteLocation(rawValue: locationTextField.text!)!.rawValue, registeredVia: locationTextField.text, didReceiveRecyQBags: self.receivedBags, completed: false, amountOfPlastic: 0, amountOfPaper: 0, amountOfTextile: 0, amountOfEWaste: 0, amountOfBioWaste: 0, wasteDepositInfo: nil, uid: uuid, spentCoins: 0 )
+                                            let groceryItem = GroceryItem(dateCreated: self.dateFormatter.string(from: Date()) , name: firstNameTextField.text!.lowercased(), lastName: lastNameTextField.text!, address: addressTextField.text!, zipCode: zipCodeTextField.text!, city: cityTextField.text!, phoneNumber: phoneTextField.text!, addedByUser: emailTextField.text!, nearestWasteLocation: NearestWasteLocation(rawValue: locationTextField.text!)!.rawValue, registeredVia: locationTextField.text, didReceiveRecyQBags: self.receivedBags, completed: false, amountOfPlastic: 0, amountOfPaper: 0, amountOfTextile: 0, amountOfEWaste: 0, amountOfBioWaste: 0, amountOfGlass: 0, wasteDepositInfo: nil, uid: uuid, spentCoins: 0 )
                                             let groceryItemRef = self.ref.child(firstNameTextField.text!.lowercased())
                                             groceryItemRef.setValue(groceryItem.toAnyObject())
                                             self.showAlertWith(title: "Bedankt!", message: "De nieuwe gebruiker: \(groceryItem.name.capitalized) \(groceryItem.lastName!) is toegevoegd")
@@ -340,9 +302,42 @@ class GroceryListTableViewController: UITableViewController {
             return
         }
     }
+}
+
+//MARK: - Search bar delegate methods.
+extension GroceryListTableViewController: UISearchBarDelegate {
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        self.searchActive = true
+    }
     
-    func userCountButtonDidTouch() {
-        performSegue(withIdentifier: ListToUsers, sender: nil)
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        self.searchActive = false
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        self.searchActive = false
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        self.searchActive = false
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        self.filteredItems = self.items.filter({ (item) -> Bool in
+            if let lastName = item.lastName {
+                let fullName = item.name + lastName
+                return fullName.lowercased().range(of: searchText.lowercased()) != nil
+            }
+            return false
+        })
+        if searchText != "" {
+            self.searchActive = true
+            tableView.reloadData()
+        }
+        else {
+            self.searchActive =  false
+            tableView.reloadData()
+        }
     }
 }
 
@@ -359,6 +354,8 @@ extension GroceryListTableViewController: UIPickerViewDelegate {
     }
 }
 
+
+//MARK: Textfield delegate methods.
 extension GroceryListTableViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         if textField == self.alert.textFields?[8] {
@@ -379,3 +376,4 @@ extension GroceryListTableViewController: UITextFieldDelegate {
         }
     }
 }
+
