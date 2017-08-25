@@ -78,10 +78,10 @@ class GroceryListTableViewController: UITableViewController {
             var newItems = [GroceryItem]()
             for item in (snapshot.children) {
                 
-                //                let itemTest = item as! FIRDataSnapshot
-                //                if itemTest.key  == "fouad" {
-                //                   itemTest.ref.removeValue()
-                //                }
+                                let itemTest = item as! FIRDataSnapshot
+                                if itemTest.key  == "fatamaa" {
+                                   itemTest.ref.removeValue()
+                                }
                 let groceryItem = GroceryItem(snapshot: item as! FIRDataSnapshot)
                 newItems.append(groceryItem)
             }
