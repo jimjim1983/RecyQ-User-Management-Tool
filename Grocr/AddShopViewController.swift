@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol UpdateShopItemsDelegate: class {
+    func addShopItem(shopItem: ShopItem)
+}
+
 class AddShopViewController: UIViewController {
     @IBOutlet var shopNameTextField: UITextField!
     @IBOutlet var itemDescriptionTextField: UITextField!
@@ -15,12 +19,27 @@ class AddShopViewController: UIViewController {
     @IBOutlet var detailDescriptionTextView: UITextView!
     @IBOutlet var itemImageView: UIImageView!
     @IBOutlet var saveButton: UIBarButtonItem!
+    @IBOutlet var shopNameLabel: UILabel!
     
     let shopsRef = FIRDatabase.database().reference(withPath: "Shops")
-
+    let testRef = FIRDatabase.database().reference(withPath: "Tests")
+    var shops = [Shop]()
+    var shopName: String?
+    var shopItem: ShopItem?
+    var validationCode: Int?
+    var isAddingItem = false
+    
+    //weak var updateShopItemsDelegate: UpdateShopItemsDelegate?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        
+        if let shopItem = self.shopItem {
+            showShopItemDetails(shopItem: shopItem)
+        } else if isAddingItem {
+            configureViewForAddingNewItem()
+        }
     }
     
     func setupViews() {
@@ -32,10 +51,39 @@ class AddShopViewController: UIViewController {
         self.tokenAmountTextField.delegate = self
     }
     
-    func addShop() {
+    func showShopItemDetails(shopItem: ShopItem) {
+        title = "Wijzig product"
+        self.shopNameTextField.isHidden = true
+        self.shopNameLabel.isHidden = false
+        self.shopNameLabel.text = shopItem.shopName
+        self.itemDescriptionTextField.text = shopItem.itemName
+        self.detailDescriptionTextView.text = shopItem.detailDescription
+        self.tokenAmountTextField.text = "\(shopItem.tokenAmount)"
+        
+        if let imageData = Data(base64Encoded: shopItem.imageString, options: .ignoreUnknownCharacters) {
+            self.itemImageView.image = UIImage(data: imageData)
+        }
+        self.saveButton.title = "Wijzig"
+    }
+    
+    func configureViewForAddingNewItem() {
+        title = "Product toevoegen"
+        self.shopNameTextField.isHidden = true
+        self.shopNameLabel.isHidden = false
+        self.shopNameLabel.text = self.shopName ?? "Winkel onbekend"
+    }
+    
+    func addItemOrShop() {
         self.saveButton.isEnabled = false
-        guard self.shopNameTextField.text != "",
-            self.itemDescriptionTextField.text != "",
+        
+        if !isAddingItem {
+            guard self.shopNameTextField.text != "" else {
+               self.showAlertWith(title: "Fout", message: "Alle velden dienen ingevuld te zijn, en een foto dient geselecteerd te zijn")
+                return
+            }
+        }
+       
+        guard self.itemDescriptionTextField.text != "",
             self.tokenAmountTextField.text != "",
             self.detailDescriptionTextView.text != "",
             self.itemImageView.image != #imageLiteral(resourceName: "Camera-Icon") else {
@@ -44,21 +92,65 @@ class AddShopViewController: UIViewController {
                 return
         }
         
-        if let name = self.shopNameTextField.text, let item = self.itemDescriptionTextField.text, let description = detailDescriptionTextView.text, let tokens = self.tokenAmountTextField.text {
-            let validationCode = randomNumberWith(digits: 6)
-            let newShop = Shop(shopName: name, validationCode: validationCode, itemName: item, detailDescription: description, tokenAmount: Int(tokens) ?? 0, imageString: imageToBase64String(image: self.itemImageView.image))
+        // Check if the user is adding an item first.
+        if let name = self.isAddingItem ? self.shopNameLabel.text : self.shopNameTextField.text,
+            let item = self.itemDescriptionTextField.text,
+            let description = detailDescriptionTextView.text,
+            let tokens = self.tokenAmountTextField.text {
+            
+            // Check if the shop already exists, than we assign the existing validation code.
+            for shop in self.shops {
+                if shop.shopName.lowercased() == name.lowercased() {
+                    self.validationCode = shop.shopItems.first?.validationCode
+                }
+            }
+            
+            let newItem = ShopItem(key: "",shopName: name, validationCode: self.validationCode ?? randomNumberWith(digits: 6), itemName: item, detailDescription: description, tokenAmount: Int(tokens) ?? 0, imageString: imageToBase64String(image: self.itemImageView.image))
             let ref = self.shopsRef.child(name).childByAutoId()
-            ref.setValue(newShop.toAnyObject(), withCompletionBlock: { (error, reference) in
+            ref.setValue(newItem.toAnyObject(), withCompletionBlock: { (error, reference) in
                 if error == nil {
                     let okAction = UIAlertAction(title: "Ok", style: .default, handler: { (okAction) in
+//                        if let updateShopItemsDelegate = self.updateShopItemsDelegate {
+//                            updateShopItemsDelegate.addShopItem(shopItem: newItem)
+//                        }
                         _ = self.navigationController?.popViewController(animated: true)
                     })
-                    self.showAlertWith(title: "Succes", message: "De winkel is succesvol toegevoegd.Validatie code: \(validationCode)", actions: [okAction])
+                    self.showAlertWith(title: "Succes", message: "De winkel is succesvol toegevoegd.", actions: [okAction])
                 }
                 else {
                     self.showAlertWith(title: "Fout", message: "Er is iets mis gegaan: \(error?.localizedDescription)")
                 }
             })
+        }
+    }
+    
+    func editShopItem() {
+        guard self.itemDescriptionTextField.text != "",
+            self.tokenAmountTextField.text != "",
+            self.detailDescriptionTextView.text != "",
+            self.itemImageView.image != #imageLiteral(resourceName: "Camera-Icon") else {
+                self.showAlertWith(title: "Fout", message: "Alle velden dienen ingevuld te zijn, en een foto dient geselecteerd te zijn")
+                self.saveButton.isEnabled = true
+                return
+        }
+        
+        if let itemName = self.itemDescriptionTextField.text,
+            let description = detailDescriptionTextView.text,
+            let tokens = self.tokenAmountTextField.text,
+            let shopItem = self.shopItem,
+            let key = shopItem.key {
+            
+            let updatedValues = ["itemName": itemName as AnyObject,
+                                 "tokenAmount": Int(tokens) as AnyObject,
+                                 "detailDescription": description as AnyObject,
+                                 "imageString": imageToBase64String(image: self.itemImageView.image) as AnyObject]
+            
+            let shop = self.shopsRef.child(shopItem.shopName)
+            shop.child(key).updateChildValues(updatedValues)
+            
+            if let navigationController = navigationController {
+                navigationController.popViewController(animated: true)
+            }
         }
     }
     
@@ -84,9 +176,14 @@ class AddShopViewController: UIViewController {
     }
 
     @IBAction func saveButtonTapped(_ sender: Any) {
-        addShop()
+        let sender = sender as! UIBarButtonItem
+        if sender.title == "Wijzig" {
+            editShopItem()
+            debugPrint("Wijzig")
+        } else if sender.title == "Opslaan" {
+            addItemOrShop()
+        }
     }
-
 }
 
 // MARK: - UITetFieldDelegate functions.

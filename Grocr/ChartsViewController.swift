@@ -8,8 +8,9 @@
 
 import UIKit
 import Charts
+import MessageUI
 
-class ChartsViewController: UIViewController, ChartViewDelegate, IAxisValueFormatter {
+class ChartsViewController: UIViewController, ChartViewDelegate, IAxisValueFormatter, MFMailComposeViewControllerDelegate {
 
     @IBOutlet var dateCreatedLabel: UILabel!
     @IBOutlet var addressLabel: UILabel!
@@ -26,8 +27,7 @@ class ChartsViewController: UIViewController, ChartViewDelegate, IAxisValueForma
     @IBOutlet var zipcodeTextField: UITextField!
     @IBOutlet var cityTextField: UITextField!
     @IBOutlet var phoneTextField: UITextField!
-    @IBOutlet var emailTextField: UITextField!
-    
+    @IBOutlet var `switch`: UISwitch!
     
     @IBOutlet var barChartView: BarChartView!
     
@@ -52,12 +52,13 @@ class ChartsViewController: UIViewController, ChartViewDelegate, IAxisValueForma
     private func setUpNavigationBar() {
         let detailViewBarItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(showGroceryDetailVC))
         let changeUserDetailsItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editUserDetails))
-        self.navigationItem.rightBarButtonItems = [detailViewBarItem] // Add the changeUserDetailsItem back.
+        self.navigationItem.rightBarButtonItems = [detailViewBarItem, changeUserDetailsItem] // Add the changeUserDetailsItem back.
         self.navigationController?.navigationBar.backItem?.title = "Anything Else"
     }
     
     private func setupViews() {
         self.editStackView.isHidden = true
+        self.switch.isHidden = true
         
         if groceryItem.lastName != nil {
             self.title = groceryItem.name.capitalized + " " + (groceryItem.lastName?.capitalized)!
@@ -86,7 +87,6 @@ class ChartsViewController: UIViewController, ChartViewDelegate, IAxisValueForma
             self.zipcodeTextField.text = zipCode
             self.cityTextField.text = city
             self.phoneTextField.text = phone
-            self.emailTextField.text = groceryItem.addedByUser
         }
         
         if let didReceiveRecyQBags = groceryItem.didReceiveRecyQBags {
@@ -112,10 +112,87 @@ class ChartsViewController: UIViewController, ChartViewDelegate, IAxisValueForma
         groceryDetailsVC.admin = self.admin
         groceryDetailsVC.groceryItem = self.groceryItem
         self.navigationController?.pushViewController(groceryDetailsVC, animated: true)
+        //self.navigationController?.present(groceryDetailsVC, animated: true, completion: nil)
     }
     
     func editUserDetails() {
         self.editStackView.isHidden = !self.editStackView.isHidden
+        self.switch.isHidden = !self.switch.isHidden
+        if let didReceiveRecyQBags = self.groceryItem.didReceiveRecyQBags {
+            self.switch.setOn(didReceiveRecyQBags, animated: true)
+        }
+        //captureScreen()
+        //UIImageWriteToSavedPhotosAlbum(captureScreen()!, nil, nil, nil)
+        //toPDF(fileName: "TEST")
+    }
+    @IBAction func switchAction(_ sender: Any) {
+        let bagsSwitch = sender as! UISwitch
+        if bagsSwitch.isOn {
+            self.didReceiveRecyQBags.text = "Ja"
+        }
+        else {
+            self.didReceiveRecyQBags.text = "Nee"
+        }
+    }
+    
+    func toPDF(fileName: String) -> String {
+        
+        // Creates a mutable data object for updating with binary data, like a byte array
+        let pdfData = NSMutableData()
+        
+        // Change the frame size to include all data
+        //        let originalFrame = self.frame
+        //        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.contentSize.width, self.contentSize.height)
+        
+        // Points the pdf converter to the mutable data object and to the UIView to be converted
+        UIGraphicsBeginPDFContextToData(pdfData, self.view.bounds, nil)
+        UIGraphicsBeginPDFPage()
+        let pdfContext = UIGraphicsGetCurrentContext();
+        
+        // Draws rect to the view and thus this is captured by UIGraphicsBeginPDFContextToData
+        self.view.layer.render(in: pdfContext!)
+        
+        // Remove PDF rendering context
+        UIGraphicsEndPDFContext()
+        
+        // Retrieves the document directories from the iOS device
+        let documentDirectories: NSArray = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true) as NSArray
+        
+        let documentDirectory = documentDirectories.object(at: 0)
+        let documentDirectoryFilename = (documentDirectory as! NSString).appendingPathComponent(fileName);
+        
+        // Instructs the mutable data object to write its context to a file on disk
+        pdfData.write(toFile: "/Users/Supervisor/stats.pdf", atomically: true)
+        
+            // Works. Stil need to adjust is to be better.
+            let mailComposer = MFMailComposeViewController()
+            mailComposer.mailComposeDelegate = self
+            //let data = Data(documentDirectoryFilename)
+            mailComposer.setToRecipients(["f.astitou@gmail.com"])
+            mailComposer.setSubject("PDF van Statistieken")
+            mailComposer.addAttachmentData(pdfData as Data, mimeType: "application/pdf", fileName: fileName)
+            self.present(mailComposer, animated: true, completion: nil)
+
+      
+        
+        // Back to normal size
+        //self.frame = originalFrame
+        
+        // Put back the scroll indicator
+        //self.showsVerticalScrollIndicator = true
+        
+        print("This is the filename: \(documentDirectoryFilename)")
+        
+        return documentDirectoryFilename
+    }
+    
+    // TAke a screenshot from the main view.
+    func captureScreen() -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(view.bounds.size, false, UIScreen.main.scale)
+        view.layer.render(in: UIGraphicsGetCurrentContext()!)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image
     }
     
     func setChart(dataPoints: [String], values: [Double]) {
@@ -168,6 +245,7 @@ class ChartsViewController: UIViewController, ChartViewDelegate, IAxisValueForma
         saveButton.isEnabled = false
         saveButton.backgroundColor = .lightGray
         saveEditedUserDetails()
+        _ = self.navigationController?.popViewController(animated: true)
     }
     
     func saveEditedUserDetails() {
@@ -175,7 +253,7 @@ class ChartsViewController: UIViewController, ChartViewDelegate, IAxisValueForma
         let userToEditRef = ref.child(self.groceryItem.key)
         
         //userToEditRef.child("name").setValue(self.firstNameTextField.text)
-        userToEditRef.observe(.value, with: { (snapshot) in
+        userToEditRef.observeSingleEvent(of: .value, with: { (snapshot) in
             print("SNAPSHOT = : \(snapshot)")
             
 
@@ -196,8 +274,9 @@ class ChartsViewController: UIViewController, ChartViewDelegate, IAxisValueForma
             let zipCode = self.zipcodeTextField.text ?? user.zipCode
             let city = self.cityTextField.text ?? user.city
             let phoneNumber = self.phoneTextField.text ?? user.phoneNumber
-            let email = self.emailTextField.text ?? user.addedByUser
-            editedUser = GroceryItem(dateCreated: user.dateCreated, name: firstName, lastName: lastName ?? "", address: address ?? "", zipCode: zipCode ?? "", city: city ?? "", phoneNumber: phoneNumber ?? "", addedByUser: email, nearestWasteLocation: user.nearestWasteLocation ?? "", registeredVia: user.registeredVia ?? "", didReceiveRecyQBags: user.didReceiveRecyQBags ?? false, completed: user.completed, amountOfPlastic: user.amountOfPlastic, amountOfPaper: user.amountOfPaper, amountOfTextile: user.amountOfTextile, amountOfEWaste: user.amountOfEWaste, amountOfBioWaste: user.amountOfBioWaste, amountOfGlass: user.amountOfGlass ?? 0, wasteDepositInfo: user.wasteDepositInfo, uid: user.uid, spentCoins: user.spentCoins ?? 0)
+            let email = user.addedByUser
+            let didReceiveRecyQBags = self.switch.isOn
+            editedUser = GroceryItem(dateCreated: user.dateCreated, name: firstName, lastName: lastName ?? "", address: address ?? "", zipCode: zipCode ?? "", city: city ?? "", phoneNumber: phoneNumber ?? "", addedByUser: email, nearestWasteLocation: user.nearestWasteLocation ?? "", registeredVia: user.registeredVia ?? "", didReceiveRecyQBags: didReceiveRecyQBags, completed: user.completed, amountOfPlastic: user.amountOfPlastic, amountOfPaper: user.amountOfPaper, amountOfTextile: user.amountOfTextile, amountOfEWaste: user.amountOfEWaste, amountOfBioWaste: user.amountOfBioWaste, amountOfGlass: user.amountOfGlass ?? 0, wasteDepositInfo: user.wasteDepositInfo, uid: user.uid, spentCoins: user.spentCoins ?? 0)
         }
         return editedUser
     }

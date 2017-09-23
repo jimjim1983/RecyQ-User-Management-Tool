@@ -27,6 +27,7 @@ class GroceryListTableViewController: UITableViewController {
     
     @IBOutlet var composeButton: UIBarButtonItem!
     @IBOutlet var searchBar: UISearchBar!
+    
     // MARK: Constants
     let ListToUsers = "ListToUsers"
     let ref = FIRDatabase.database().reference(withPath: "clients")
@@ -57,11 +58,21 @@ class GroceryListTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if self.admin.firstName == "Test" || self.admin.firstName == "Richard" {
+        
+        setupViews()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        resetSearchBar()
+        fetchUsersFromFirebase()
+    }
+    
+    func setupViews() {
+        if self.admin.firstName == "Test" || self.admin.firstName == "Richard" || self.admin.firstName == "Jacintha" {
             self.composeButton.isEnabled = true
         }
-        // Set up swipe to delete
-        tableView.allowsMultipleSelectionDuringEditing = false
         self.wasteLocations = [.amsterdamsePoort, .hBuurt, .holendrecht, .venserpolder]
         self.dataSource = PickerViewDataSource(wasteLocations: self.wasteLocations)
         self.searchBar.delegate = self
@@ -69,116 +80,22 @@ class GroceryListTableViewController: UITableViewController {
         self.locationsPickerView.delegate = self
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        self.searchBar.resignFirstResponder()
-        
+    func fetchUsersFromFirebase() {
         ref.queryOrdered(byChild: "name").observe(.value, with: { snapshot in
             var newItems = [GroceryItem]()
             for item in (snapshot.children) {
-                
-                                let itemTest = item as! FIRDataSnapshot
-                                if itemTest.key  == "fatamaa" {
-                                   itemTest.ref.removeValue()
-                                }
                 let groceryItem = GroceryItem(snapshot: item as! FIRDataSnapshot)
                 newItems.append(groceryItem)
             }
             self.items = newItems
             self.tableView.reloadData()
-            
         })
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-
-    }
-    
-    // MARK: UITableView Delegate methods
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if searchActive {
-            return self.filteredItems.count
-        }
-        return items.count
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ItemCell", for: indexPath)
-        let groceryItem: GroceryItem!
-        if self.searchActive {
-            groceryItem = self.filteredItems[indexPath.row]
-        }
-        else {
-            groceryItem = self.items[indexPath.row]
-        }
-        let wasteTotal = Double(groceryItem.amountOfBioWaste) + Double(groceryItem.amountOfEWaste) +  Double(groceryItem.amountOfPaper) + Double(groceryItem.amountOfPlastic) + Double(groceryItem.amountOfTextile)
-        
-        if groceryItem.lastName?.capitalized != nil {
-            cell.textLabel?.text = (groceryItem.name.capitalized) + " " + (groceryItem.lastName!.capitalized)
-        }
-        else {
-            cell.textLabel?.text = groceryItem.name.capitalized
-        }
-        cell.detailTextLabel?.textColor = UIColor.darkGray
-        
-        if wasteTotal >= 1 {
-            cell.detailTextLabel?.text = "Beginning user"
-            
-        }
-        if wasteTotal == 0 {
-            cell.detailTextLabel?.text = "New User"
-            
-        }
-        if wasteTotal > 30 {
-            cell.detailTextLabel?.text = "Frequent User"
-            
-        }
-        if wasteTotal > 50 {
-            cell.detailTextLabel?.text = "Loyal User"
-            
-        }
-        if wasteTotal > 120 {
-            cell.detailTextLabel?.text = "Top User"
-            
-        }
-        if wasteTotal > 250 {
-            cell.detailTextLabel?.text = "Super Awesome User"
-            
-        }
-        return cell
-    }
-    
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            let groceryItem = items[indexPath.row]
-            groceryItem.ref?.removeValue()
-        }
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        let chartsVC = self.storyboard?.instantiateViewController(withIdentifier: "chartsVC") as! ChartsViewController
-        let groceryItem: GroceryItem!
-        if self.searchActive {
-            groceryItem = self.filteredItems[indexPath.row]
-        }
-        else {
-            groceryItem = self.items[indexPath.row]
-        }
-        let wasteAmounts: [Double] = [groceryItem.amountOfPlastic, groceryItem.amountOfPaper, groceryItem.amountOfTextile, groceryItem.amountOfGlass ?? 0, groceryItem.amountOfBioWaste, groceryItem.amountOfEWaste]
-        chartsVC.admin = self.admin
-        chartsVC.amounts = wasteAmounts
-        chartsVC.groceryItem = groceryItem
-        
-        self.navigationController?.pushViewController(chartsVC, animated: true)
+    func resetSearchBar() {
+        self.searchBar.resignFirstResponder()
+        self.searchBar.text = ""
+        self.searchActive = false
     }
     
     // MARK: Compose action.
@@ -190,8 +107,8 @@ class GroceryListTableViewController: UITableViewController {
     
     @IBAction func addButtonDidTouch(_ sender: AnyObject) {
 
-        self.alert = UIAlertController(title: "Voer gebruikersnaam in",
-                                      message: "van nieuwe gebruiker",
+        self.alert = UIAlertController(title: "Registreer",
+                                      message: "Voer alle gegevens in.",
                                       preferredStyle: .alert)
         
         let saveAction = UIAlertAction(title: "Opslaan",
@@ -310,10 +227,6 @@ extension GroceryListTableViewController: UISearchBarDelegate {
         self.searchActive = true
     }
     
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        self.searchActive = false
-    }
-    
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         self.searchActive = false
     }
@@ -338,6 +251,96 @@ extension GroceryListTableViewController: UISearchBarDelegate {
             self.searchActive =  false
             tableView.reloadData()
         }
+    }
+}
+
+// MARK: UITableView delegate source methods
+extension GroceryListTableViewController {
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    //Only Richard is allowed to delete users.
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            if self.admin.firstName == "Richard" {
+                let groceryItem = items[indexPath.row]
+                groceryItem.ref?.removeValue()
+            }
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.searchBar.resignFirstResponder()
+        let chartsVC = self.storyboard?.instantiateViewController(withIdentifier: "chartsVC") as! ChartsViewController
+        let groceryItem: GroceryItem!
+        if self.searchActive {
+            groceryItem = self.filteredItems[indexPath.row]
+        }
+        else {
+            groceryItem = self.items[indexPath.row]
+        }
+        let wasteAmounts: [Double] = [groceryItem.amountOfPlastic, groceryItem.amountOfPaper, groceryItem.amountOfTextile, groceryItem.amountOfGlass ?? 0, groceryItem.amountOfBioWaste, groceryItem.amountOfEWaste]
+        chartsVC.admin = self.admin
+        chartsVC.amounts = wasteAmounts
+        chartsVC.groceryItem = groceryItem
+        
+        self.navigationController?.pushViewController(chartsVC, animated: true)
+    }
+}
+
+// MARK: UITableView data source methods
+extension GroceryListTableViewController {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if searchActive {
+            return self.filteredItems.count
+        }
+        return items.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ItemCell", for: indexPath)
+        let groceryItem: GroceryItem!
+        if self.searchActive {
+            groceryItem = self.filteredItems[indexPath.row]
+        }
+        else {
+            groceryItem = self.items[indexPath.row]
+        }
+        let wasteTotal = Double(groceryItem.amountOfBioWaste) + Double(groceryItem.amountOfEWaste) +  Double(groceryItem.amountOfPaper) + Double(groceryItem.amountOfPlastic) + Double(groceryItem.amountOfTextile)
+        
+        if groceryItem.lastName?.capitalized != nil {
+            cell.textLabel?.text = (groceryItem.name.capitalized) + " " + (groceryItem.lastName!.capitalized)
+        }
+        else {
+            cell.textLabel?.text = groceryItem.name.capitalized
+        }
+        cell.detailTextLabel?.textColor = UIColor.darkGray
+        
+        if wasteTotal >= 1 {
+            cell.detailTextLabel?.text = "Beginning user"
+            
+        }
+        if wasteTotal == 0 {
+            cell.detailTextLabel?.text = "New User"
+            
+        }
+        if wasteTotal > 30 {
+            cell.detailTextLabel?.text = "Frequent User"
+            
+        }
+        if wasteTotal > 50 {
+            cell.detailTextLabel?.text = "Loyal User"
+            
+        }
+        if wasteTotal > 120 {
+            cell.detailTextLabel?.text = "Top User"
+            
+        }
+        if wasteTotal > 250 {
+            cell.detailTextLabel?.text = "Super Awesome User"
+        }
+        return cell
     }
 }
 

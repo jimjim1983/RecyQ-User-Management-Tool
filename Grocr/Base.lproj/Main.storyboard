@@ -81,13 +81,13 @@
                                 </subviews>
                             </stackView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="recyq_logo_l_RGB" translatesAutoresizingMaskIntoConstraints="NO" id="XyH-zA-fwG">
-                                <rect key="frame" x="166" y="377" width="436" height="145.5"/>
+                                <rect key="frame" x="166" y="378.5" width="436" height="145.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="XyH-zA-fwG" secondAttribute="height" multiplier="3:1" id="Go8-Nv-AMA"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User management tool" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="16" translatesAutoresizingMaskIntoConstraints="NO" id="Pa7-Vn-WOH">
-                                <rect key="frame" x="20" y="522.5" width="728" height="37.5"/>
+                                <rect key="frame" x="20" y="524" width="728" height="36"/>
                                 <fontDescription key="fontDescription" name="PTMono-Regular" family="PT Mono" pointSize="32"/>
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
@@ -163,6 +163,59 @@
             </objects>
             <point key="canvasLocation" x="2492" y="475"/>
         </scene>
+        <!--Stats View Controller-->
+        <scene sceneID="efm-KR-KkE">
+            <objects>
+                <viewController id="HrE-SQ-QAV" customClass="StatsViewController" customModule="RecyQ_User_Management_Tool" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="hyF-EB-uSG"/>
+                        <viewControllerLayoutGuide type="bottom" id="5Ji-Om-g1d"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="cmF-R2-uBc">
+                        <rect key="frame" x="0.0" y="64" width="768" height="960"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OqV-lh-kSS" customClass="BarChartView" customModule="Charts">
+                                <rect key="frame" x="40" y="373" width="688" height="567"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Datum" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R6y-Cb-I2y">
+                                <rect key="frame" x="299" y="36" width="429" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="PTMono-Regular" family="PT Mono" pointSize="21"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="recyq_logo_l_RGB" translatesAutoresizingMaskIntoConstraints="NO" id="diE-CT-wPQ">
+                                <rect key="frame" x="40" y="23" width="199" height="66"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Totaal" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WZY-xS-Qbf">
+                                <rect key="frame" x="211" y="184" width="347" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="PTMono-Bold" family="PT Mono" pointSize="25"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="5Ji-Om-g1d" firstAttribute="top" secondItem="OqV-lh-kSS" secondAttribute="bottom" constant="20" id="CRk-yK-hgs"/>
+                            <constraint firstItem="OqV-lh-kSS" firstAttribute="top" secondItem="hyF-EB-uSG" secondAttribute="bottom" constant="373" id="FnK-mU-ILr"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="OqV-lh-kSS" secondAttribute="trailing" constant="20" id="SYg-Dt-UnY"/>
+                            <constraint firstItem="OqV-lh-kSS" firstAttribute="leading" secondItem="cmF-R2-uBc" secondAttribute="leadingMargin" constant="20" id="UOi-Sz-7fi"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="barChartView" destination="OqV-lh-kSS" id="ygA-tL-jbL"/>
+                        <outlet property="dateLabel" destination="R6y-Cb-I2y" id="TeI-Zy-s0g"/>
+                        <outlet property="titleLabel" destination="WZY-xS-Qbf" id="yK1-ZQ-qED"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cAt-0y-9f5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1929.6875" y="-1028.3203125"/>
+        </scene>
         <!--Management View Controller-->
         <scene sceneID="u0u-8l-L6x">
             <objects>
@@ -200,13 +253,153 @@
                     </view>
                     <connections>
                         <outlet property="tableView" destination="gCl-Yi-f0I" id="aOa-d9-1Xj"/>
+                        <segue destination="2xA-jj-hLD" kind="show" identifier="showShopsList" id="Zoy-N1-rkn"/>
+                        <segue destination="HrE-SQ-QAV" kind="show" identifier="ShowTotalWaste" id="MPZ-B7-GST"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="diA-QN-s8T" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1672" y="-223"/>
         </scene>
-        <!--Winkel toevoegen-->
+        <!--Winkeliers-->
+        <scene sceneID="C7Z-Ys-YzR">
+            <objects>
+                <viewController id="2xA-jj-hLD" customClass="ShopsListViewController" customModule="RecyQ_User_Management_Tool" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Kex-Ms-RGm"/>
+                        <viewControllerLayoutGuide type="bottom" id="3yQ-9r-1bR"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="a0m-P4-SCT">
+                        <rect key="frame" x="0.0" y="64" width="768" height="960"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Pxb-U9-Q1V">
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="960"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="ShopsCell" textLabel="3kl-z7-15F" detailTextLabel="Aab-aj-edc" style="IBUITableViewCellStyleSubtitle" id="4OU-pr-VxL">
+                                        <rect key="frame" x="0.0" y="28" width="768" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4OU-pr-VxL" id="krE-Ls-fe0">
+                                            <rect key="frame" x="0.0" y="0.0" width="702" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3kl-z7-15F">
+                                                    <rect key="frame" x="48" y="4" width="34" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Aab-aj-edc">
+                                                    <rect key="frame" x="48" y="25" width="44" height="15"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="pZD-iI-fAC" kind="show" identifier="showShopItems" id="mty-FD-EMq"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Pxb-U9-Q1V" firstAttribute="top" secondItem="Kex-Ms-RGm" secondAttribute="bottom" id="EnT-v5-QGa"/>
+                            <constraint firstAttribute="trailing" secondItem="Pxb-U9-Q1V" secondAttribute="trailing" id="O0A-qJ-iMy"/>
+                            <constraint firstItem="Pxb-U9-Q1V" firstAttribute="leading" secondItem="a0m-P4-SCT" secondAttribute="leading" id="UAx-qV-PaF"/>
+                            <constraint firstItem="3yQ-9r-1bR" firstAttribute="top" secondItem="Pxb-U9-Q1V" secondAttribute="bottom" id="qCb-Bb-Ms6"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Winkeliers" id="OaX-FR-uag">
+                        <barButtonItem key="rightBarButtonItem" title="Winkel toevoegen" id="MA6-U6-8iT">
+                            <connections>
+                                <segue destination="7hM-hC-c6A" kind="show" identifier="AddShop" id="lzo-oI-xba"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="tableView" destination="Pxb-U9-Q1V" id="aD5-ee-eu2"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Pik-MF-qb4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2467" y="-226"/>
+        </scene>
+        <!--Winkelier-->
+        <scene sceneID="kv3-Wf-oNc">
+            <objects>
+                <viewController id="pZD-iI-fAC" customClass="ShopItemsListViewController" customModule="RecyQ_User_Management_Tool" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="qzz-Pn-io5"/>
+                        <viewControllerLayoutGuide type="bottom" id="z1e-8Y-GXw"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="l8v-f9-5Tj">
+                        <rect key="frame" x="0.0" y="64" width="768" height="960"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Rdv-Er-oqm">
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="960"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ShopItemsCell" textLabel="hgB-Vg-mZn" detailTextLabel="oJA-8m-od8" style="IBUITableViewCellStyleSubtitle" id="4Nj-8Q-E1J">
+                                        <rect key="frame" x="0.0" y="28" width="768" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4Nj-8Q-E1J" id="DJv-XB-RHC">
+                                            <rect key="frame" x="0.0" y="0.0" width="768" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="hgB-Vg-mZn">
+                                                    <rect key="frame" x="48" y="4" width="34" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="oJA-8m-od8">
+                                                    <rect key="frame" x="48" y="25" width="44" height="15"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="7hM-hC-c6A" kind="show" identifier="showShopItem" id="RmD-hQ-K8e"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Rdv-Er-oqm" firstAttribute="top" secondItem="qzz-Pn-io5" secondAttribute="bottom" id="ILS-p8-tFj"/>
+                            <constraint firstItem="Rdv-Er-oqm" firstAttribute="leading" secondItem="l8v-f9-5Tj" secondAttribute="leading" id="Rka-f3-EQk"/>
+                            <constraint firstAttribute="trailing" secondItem="Rdv-Er-oqm" secondAttribute="trailing" id="dI6-zS-3iT"/>
+                            <constraint firstItem="z1e-8Y-GXw" firstAttribute="top" secondItem="Rdv-Er-oqm" secondAttribute="bottom" id="wkc-kf-Y91"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Winkelier" id="5nC-Lf-H2z">
+                        <barButtonItem key="rightBarButtonItem" title="Product toevoegen" id="4Le-DU-O60">
+                            <connections>
+                                <segue destination="7hM-hC-c6A" kind="show" identifier="AddShopItem" id="suu-BS-Ajm"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="tableView" destination="Rdv-Er-oqm" id="LEg-F9-uEp"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="f1o-uH-w5w" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3136" y="-226"/>
+        </scene>
+        <!--Toevoegen-->
         <scene sceneID="Uf3-9O-8tF">
             <objects>
                 <viewController storyboardIdentifier="addShopVC" id="7hM-hC-c6A" customClass="AddShopViewController" customModule="RecyQ_User_Management_Tool" customModuleProvider="target" sceneMemberID="viewController">
@@ -215,7 +408,7 @@
                         <viewControllerLayoutGuide type="bottom" id="xqi-vB-4NB"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="SJN-LQ-CHW">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <rect key="frame" x="0.0" y="64" width="768" height="960"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Winkel naam:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YkP-YL-zC8">
@@ -283,10 +476,17 @@
                                     <outletCollection property="gestureRecognizers" destination="keM-tU-iDe" appends="YES" id="Bav-at-3Jh"/>
                                 </connections>
                             </imageView>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="WinkelNaamLabel" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lo1-e0-eBo">
+                                <rect key="frame" x="351" y="54" width="397" height="45"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="PTMono-Regular" family="PT Mono" pointSize="31"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Winkel toevoegen" id="AMa-aP-sv1">
+                    <navigationItem key="navigationItem" title="Toevoegen" id="AMa-aP-sv1">
                         <barButtonItem key="rightBarButtonItem" title="Opslaan" id="Z2e-e9-YrW">
                             <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
@@ -299,6 +499,7 @@
                         <outlet property="itemDescriptionTextField" destination="1wc-sG-YA5" id="6Co-0b-iJO"/>
                         <outlet property="itemImageView" destination="ljq-be-ER0" id="Y5p-Sa-nbn"/>
                         <outlet property="saveButton" destination="Z2e-e9-YrW" id="rLV-Tu-1eG"/>
+                        <outlet property="shopNameLabel" destination="Lo1-e0-eBo" id="eG8-cA-xaT"/>
                         <outlet property="shopNameTextField" destination="6Lc-Tf-WRE" id="wh7-ZW-tbR"/>
                         <outlet property="tokenAmountTextField" destination="wPu-Nl-afJ" id="6Nv-po-0HS"/>
                     </connections>
@@ -310,7 +511,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="2401.5625" y="-223.24218749999997"/>
+            <point key="canvasLocation" x="3844" y="-226"/>
         </scene>
         <!--Recyq User Management Tool-->
         <scene sceneID="GDd-Ja-sb5">
@@ -482,17 +683,17 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Onbekend" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="ppN-rL-YrG">
-                                        <rect key="frame" x="19" y="374" width="300" height="33"/>
+                                        <rect key="frame" x="19" y="386" width="108" height="33"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" name="PTMono-Regular" family="PT Mono" pointSize="19"/>
                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="HOt-9U-vAh">
-                                        <rect key="frame" x="437" y="56" width="275" height="332"/>
+                                        <rect key="frame" x="437" y="56" width="275" height="290"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="11" translatesAutoresizingMaskIntoConstraints="NO" id="5rl-eu-D9n">
-                                                <rect key="frame" x="0.0" y="0.0" width="275" height="276"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="275" height="235"/>
                                                 <subviews>
                                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Voornaam" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="YDm-qv-eoW">
                                                         <rect key="frame" x="0.0" y="0.0" width="275" height="30"/>
@@ -554,20 +755,10 @@
                                                         <fontDescription key="fontDescription" name="PTMono-Regular" family="PT Mono" pointSize="19"/>
                                                         <textInputTraits key="textInputTraits"/>
                                                     </textField>
-                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email adres" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="YF1-HK-9CH">
-                                                        <rect key="frame" x="0.0" y="246" width="275" height="30"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="275" id="Dpo-FB-5sH"/>
-                                                            <constraint firstAttribute="height" constant="30" id="uKc-y3-As6"/>
-                                                        </constraints>
-                                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                        <fontDescription key="fontDescription" name="PTMono-Regular" family="PT Mono" pointSize="19"/>
-                                                        <textInputTraits key="textInputTraits"/>
-                                                    </textField>
                                                 </subviews>
                                             </stackView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mNi-fn-Tvw">
-                                                <rect key="frame" x="63" y="296" width="149" height="36"/>
+                                                <rect key="frame" x="63" y="255" width="149" height="35"/>
                                                 <color key="backgroundColor" red="0.1764705882" green="0.80784313730000001" blue="0.031372549020000001" alpha="1" colorSpace="calibratedRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="149" id="z9u-K1-vN1"/>
@@ -582,6 +773,14 @@
                                             </button>
                                         </subviews>
                                     </stackView>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Z4z-TV-ANl">
+                                        <rect key="frame" x="170" y="387" width="51" height="31"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="onTintColor" red="0.17647058823529413" green="0.80392156862745101" blue="0.035294117647058823" alpha="1" colorSpace="calibratedRGB"/>
+                                        <connections>
+                                            <action selector="switchAction:" destination="8Dv-kf-Buf" eventType="valueChanged" id="Di3-vH-clO"/>
+                                        </connections>
+                                    </switch>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -611,12 +810,12 @@
                         <outlet property="didReceiveRecyQBags" destination="ppN-rL-YrG" id="JRs-NP-V9s"/>
                         <outlet property="editStackView" destination="HOt-9U-vAh" id="tr5-t6-Yhr"/>
                         <outlet property="emailLabel" destination="NaD-3Y-yhk" id="dac-n0-4m9"/>
-                        <outlet property="emailTextField" destination="YF1-HK-9CH" id="pUT-Gf-kcD"/>
                         <outlet property="firstNameTextField" destination="YDm-qv-eoW" id="GbI-Yl-wcU"/>
                         <outlet property="lastNameTextField" destination="AFM-VW-hsq" id="pkZ-3Z-zOE"/>
                         <outlet property="phoneLabel" destination="Z2W-m5-O9H" id="Ubi-Dm-Pz3"/>
                         <outlet property="phoneTextField" destination="4Rp-oV-J4h" id="mOY-Td-61l"/>
                         <outlet property="registeredVia" destination="HMD-dc-sgn" id="bUo-Wq-64T"/>
+                        <outlet property="switch" destination="Z4z-TV-ANl" id="ZJF-5o-Ans"/>
                         <outlet property="zipCodeAndCityLabel" destination="hZB-tm-EZ1" id="lCm-Jv-cDJ"/>
                         <outlet property="zipcodeTextField" destination="eqI-GA-4M2" id="pjq-kP-kHh"/>
                     </connections>
@@ -654,4 +853,7 @@
         <image name="Camera-Icon" width="112" height="112"/>
         <image name="recyq_logo_l_RGB" width="436" height="105"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="suu-BS-Ajm"/>
+    </inferredMetricsTieBreakers>
 </document>
